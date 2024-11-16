@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class Diagram implements Initializable {
-	//,t,t
     public Button buttonBack;
     public BarChart Chart;
     public CategoryAxis categoryAxis;
