@@ -1,92 +1,73 @@
 package condorcet.Models.Entities;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+
 @Entity
 @Table(name="person_data")
 public class PersonData {
+	@Id
+	@OneToOne
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int Id;
+	@Column(name="name")
+	private String Name;
+	@Column(name="age")
     private int Age;
+	@Column(name="mail")
     private String Mail;
-    private String Address;
-    private String Sex;
-    private Set<User> Users = new HashSet<>();
-    //private Set<Passenger> Passengers = new HashSet<>();
+	@Column(name="phone_number")
+    private String PhoneNumber;
+	
     public PersonData(){
-
-    }
-    public PersonData(int id, int age, String mail, String address, String sex, Set<User> users
-    		//, Set<Passenger> passengers
-    		) {
-        Id = id;
-        Age = age;
-        Mail = mail;
-        Address = address;
-        Sex = sex;
-        Users = users;
-       //Passengers = passengers;
-    }
-    @Column(name="sex",length = 45)
-    public String getSex() {
-        return Sex;
     }
 
-    public void setSex(String sex) {
-        Sex = sex;
-    }
-    @Column(name="address",length = 45)
+    public PersonData(int id, String name, int age, String mail, String phoneNumber) {
+		super();
+		Id = id;
+		Name = name;
+		Age = age;
+		Mail = mail;
+		PhoneNumber = phoneNumber;
+	}
 
-    public String getAddress() {
-        return Address;
-    }
+	public int getId() {
+		return Id;
+	}
 
-    public void setAddress(String address) {
-        Address = address;
-    }
-    @Column(name="mail",length = 45)
+	public void setId(int id) {
+		Id = id;
+	}
 
-    public String getMail() {
-        return Mail;
-    }
+	public String getName() {
+		return Name;
+	}
 
-    public void setMail(String mail) {
-        Mail = mail;
-    }
-    @Column(name="age")
+	public void setName(String name) {
+		Name = name;
+	}
 
-    public int getAge() {
-        return Age;
-    }
+	public int getAge() {
+		return Age;
+	}
 
-    public void setAge(int age) {
-        Age = age;
-    }
-    @javax.persistence.Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="id")
-    public int getId() {
-        return Id;
-    }
+	public void setAge(int age) {
+		Age = age;
+	}
 
-    public void setId(int id) {
-        Id = id;
-    }
-    
-	/*
-	 * @OneToMany(fetch = FetchType.EAGER, mappedBy = "personData") public
-	 * Set<Passenger> getPassengers() { return Passengers; }
-	 * 
-	 * public void setPassengers(Set<Passenger> passengers) { Passengers =
-	 * passengers; }
-	 */
-    
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "personData")
-    public Set<User> getUsers() {
-        return Users;
-    }
+	public String getMail() {
+		return Mail;
+	}
 
-    public void setUsers(Set<User> users) {
-        Users = users;
-    }
+	public void setMail(String mail) {
+		Mail = mail;
+	}
+
+	public String getPhoneNumber() {
+		return PhoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		PhoneNumber = phoneNumber;
+	}
+
 }
