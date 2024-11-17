@@ -78,7 +78,8 @@ public class ClientThread implements Runnable {
                 }
                 out.println(gson.toJson(response));
                 out.flush();
-            }*/
+                */
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

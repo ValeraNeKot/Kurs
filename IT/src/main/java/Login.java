@@ -43,20 +43,21 @@ public class Login {
             labelMessage.setVisible(false);
             ClientSocket.getInstance().setUser(new Gson().fromJson(responseModel.getResponseData(), User.class));
             Stage stage = (Stage) buttonLogin.getScene().getWindow();
-            Parent root;
-            root = FXMLLoader.load(getClass().getResource("/Flights.fxml"));
-            Scene newScene = new Scene(root);
-            stage.setScene(newScene);
+			/*
+			 * Parent root; root = FXMLLoader.load(getClass().getResource("/Flights.fxml"));
+			 * Scene newScene = new Scene(root); stage.setScene(newScene);
+			 */
         } else {
             labelMessage.setVisible(true);
         }
     }
 
-    public void Register_Pressed(ActionEvent actionEvent) throws IOException {
-        Stage stage = (Stage) buttonLogin.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("Register.fxml"));
-        Scene newScene = new Scene(root);
-        stage.setScene(newScene);
-
-    }
+	/*
+	 * public void Register_Pressed(ActionEvent actionEvent) throws IOException {
+	 * Stage stage = (Stage) buttonLogin.getScene().getWindow(); Parent root =
+	 * FXMLLoader.load(getClass().getResource("Register.fxml")); Scene newScene =
+	 * new Scene(root); stage.setScene(newScene);
+	 * 
+	 * }
+	 */
 }
