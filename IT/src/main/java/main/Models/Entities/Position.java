@@ -12,6 +12,7 @@ import javax.persistence.Table;
 public class Position {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name= "position_id")
 	private int IdPosition;
 	@Column(name= "position_name")
 	private String NamePosition;

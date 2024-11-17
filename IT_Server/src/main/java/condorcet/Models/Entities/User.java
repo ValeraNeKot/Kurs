@@ -2,13 +2,14 @@ package condorcet.Models.Entities;
 
 import javax.persistence.*;
 
-import condorcet.Enums.Roles;
+import main.Enums.Roles;
 
 @Entity
 @Table(name="user")
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="account_id")
     private int IdAccount;
 	@Column(name="login",length = 45,nullable = false)
     private String Login;

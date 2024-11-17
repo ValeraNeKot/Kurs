@@ -9,6 +9,7 @@ import main.Enums.Roles;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="account_id")
     private int IdAccount;
 	@Column(name="login",length = 45,nullable = false)
     private String Login;

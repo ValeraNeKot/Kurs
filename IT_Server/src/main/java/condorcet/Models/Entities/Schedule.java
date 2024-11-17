@@ -1,28 +1,25 @@
 package condorcet.Models.Entities;
 
 import java.sql.Time;
+import java.util.List;
 import java.sql.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+
 
 @Entity
 @Table(name="schedule")
 public class Schedule {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "schedule_id")
     private int IdSchedule;
-	@ManyToMany(mappedBy = "specialist", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private int Id;
+	@ManyToMany(mappedBy = "Schedules", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "specialist_shedule",
+	joinColumns = {@JoinColumn(name = "schedule_id")},
+	inverseJoinColumns = { @JoinColumn(name = "specialist_id") }
+	)
+    private List<Specialist> Specialists;
 	@Column(name = "date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date date;
@@ -34,26 +31,30 @@ public class Schedule {
     private Time EndTime;
 	
 	public Schedule() {};
-	public Schedule(int idSchedule, int id, Date date, Time beginTime, Time endTime) {
-		super();
+
+	public Schedule(int idSchedule, List<Specialist> specialists, Date date, Time beginTime, Time endTime) {
 		IdSchedule = idSchedule;
-		Id = id;
+		Specialists = specialists;
 		this.date = date;
 		BeginTime = beginTime;
 		EndTime = endTime;
 	}
+
+	public List<Specialist> getSpecialists() {
+		return Specialists;
+	}
+
+	public void setSpecialists(List<Specialist> specialists) {
+		Specialists = specialists;
+	}
+
 	public int getIdSchedule() {
 		return IdSchedule;
 	}
 	public void setIdSchedule(int idSchedule) {
 		IdSchedule = idSchedule;
 	}
-	public int getId() {
-		return Id;
-	}
-	public void setId(int id) {
-		Id = id;
-	}
+
 	public Date getDate() {
 		return date;
 	}

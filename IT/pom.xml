@@ -51,5 +51,10 @@
             <artifactId>hibernate-core</artifactId>
             <version>5.4.4.Final</version>
         </dependency>
+          <dependency>
+          	<groupId>com.springapp</groupId>
+          	<artifactId>Hibernate</artifactId>
+          	<version>1.0-SNAPSHOT</version>
+          </dependency>
     </dependencies>
 </project>

@@ -5,6 +5,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -13,10 +14,12 @@ import javax.persistence.Table;
 @Table(name="candidate")
 public class Candidate {
 	@Id
-	@OneToOne(mappedBy = "person_data")
+	@OneToOne(mappedBy = "Id")
+	@Column(name = "id")
     private int Id;
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private int IdPosition;
+	@JoinColumn(name = "position_id")
+	private Vacancy vacancy;
 	@Column(name = "skills")
 	private String Skills;
 	@Column(name = "education")
@@ -25,26 +28,31 @@ public class Candidate {
 	private String PastJobs;
 	
 	public Candidate() {};
-	public Candidate(int id, int idPosition, String skills, String education, String pastJobs) {
+	
+	public Candidate(int id, Vacancy vacancy, String skills, String education, String pastJobs) {
 		super();
 		Id = id;
-		IdPosition = idPosition;
+		this.vacancy = vacancy;
 		Skills = skills;
 		Education = education;
 		PastJobs = pastJobs;
 	}
+
 	public int getId() {
 		return Id;
 	}
 	public void setId(int id) {
 		Id = id;
 	}
-	public int getIdPosition() {
-		return IdPosition;
+
+	public Vacancy getVacancy() {
+		return vacancy;
 	}
-	public void setIdPosition(int idPosition) {
-		IdPosition = idPosition;
+
+	public void setVacancy(Vacancy vacancy) {
+		this.vacancy = vacancy;
 	}
+
 	public String getSkills() {
 		return Skills;
 	}

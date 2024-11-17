@@ -8,6 +8,7 @@ public class PersonData {
 	@Id
 	@OneToOne
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
     private int Id;
 	@Column(name="name")
 	private String Name;
