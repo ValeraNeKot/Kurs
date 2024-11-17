@@ -6,7 +6,6 @@ import javax.persistence.*;
 @Table(name="person_data")
 public class PersonData {
 	@Id
-	@OneToOne
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
     private int Id;

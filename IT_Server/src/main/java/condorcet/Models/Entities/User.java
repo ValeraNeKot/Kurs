@@ -2,7 +2,7 @@ package condorcet.Models.Entities;
 
 import javax.persistence.*;
 
-import main.Enums.Roles;
+import condorcet.Enums.Roles;
 
 @Entity
 @Table(name="user")

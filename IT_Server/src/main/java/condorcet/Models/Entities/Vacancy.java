@@ -10,29 +10,35 @@ import javax.persistence.Table;
 @Table(name="vacancy")
 public class Vacancy {
 	@Id
-	@OneToOne(mappedBy = "IdPosition")
-	@Column(name="position_id")
-	private int IdPosition;
+	@OneToOne(mappedBy = "IdPost")
+	@Column(name="post_id")
+	private Post post;
 	@Column(name="number")
 	private int number;
 	
 	public Vacancy() {};
-	public Vacancy(int idPosition, int number) {
-		IdPosition = idPosition;
+	
+	public Vacancy(Post post, int number) {
+		super();
+		this.post = post;
 		this.number = number;
 	}
-	public int getIdPosition() {
-		return IdPosition;
+
+	public Post getPost() {
+		return post;
 	}
-	public void setIdPosition(int idPosition) {
-		IdPosition = idPosition;
+
+	public void setPost(Post post) {
+		this.post = post;
 	}
+
 	public int getNumber() {
 		return number;
 	}
 	public void setNumber(int number) {
 		this.number = number;
 	}
+
 	
 	
 }
