@@ -1,12 +1,14 @@
 package condorcet.Models.Entities;
 
 import javax.persistence.*;
+
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
 
 @Entity
 @Table(name="specialist")
-public class Specialist {
+public class Specialist implements Serializable{
 	@Id
 	@OneToOne
 	@Column(name ="id")

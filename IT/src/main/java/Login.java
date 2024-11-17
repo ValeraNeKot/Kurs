@@ -1,5 +1,3 @@
-
-
 import com.google.gson.Gson;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,7 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import main.Enums.RequestType;
 import main.Enums.ResponseStatus;
-//import main.Enums.Roles;
+import main.Enums.Roles;
 import main.Models.Entities.User;
 import main.Models.TCP.Request;
 import main.Models.TCP.Response;
@@ -27,7 +25,6 @@ public class Login {
     @FXML
     private TextField textfieldLogin;
 
-    public Button buttonRegister;
     public Button buttonLogin;
     public Label labelMessage;
 

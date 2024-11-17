@@ -1,5 +1,7 @@
 package condorcet.Models.Entities;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -8,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="vacancy")
-public class Vacancy {
+public class Vacancy implements Serializable{
 	@Id
 	@OneToOne(mappedBy = "IdPost")
 	@Column(name="post_id")

@@ -15,13 +15,14 @@ public class HibernateSessionFactory {
         if (sessionFactory == null) {
             try {
                 Configuration configuration = new Configuration().configure();
-                //configuration.addAnnotatedClass(Route.class);
+                configuration.addAnnotatedClass(Candidate.class);
                 configuration.addAnnotatedClass(PersonData.class);
                 configuration.addAnnotatedClass(User.class);
-                //configuration.addAnnotatedClass(UserMark.class);
-                //configuration.addAnnotatedClass(Passenger.class);
-                //configuration.addAnnotatedClass(Aircraft.class);
-                //configuration.addAnnotatedClass(Flight.class);
+                configuration.addAnnotatedClass(Department.class);
+                configuration.addAnnotatedClass(Post.class);
+                configuration.addAnnotatedClass(Schedule.class);
+                configuration.addAnnotatedClass(Specialist.class);
+                configuration.addAnnotatedClass(Vacancy.class);
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().configure(configFileName);
                 sessionFactory = configuration.buildSessionFactory(builder.build());
   

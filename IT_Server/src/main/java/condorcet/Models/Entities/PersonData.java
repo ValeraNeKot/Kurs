@@ -1,10 +1,12 @@
 package condorcet.Models.Entities;
 
+import java.io.Serializable;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name="person_data")
-public class PersonData {
+public class PersonData implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")

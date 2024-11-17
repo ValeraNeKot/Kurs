@@ -1,12 +1,14 @@
 package main.Models.Entities;
 
+import java.io.Serializable;
+
 import javax.persistence.*;
 
 import main.Enums.Roles;
 
 @Entity
 @Table(name="user")
-public class User {
+public class User implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="account_id")

@@ -2,6 +2,7 @@ package main.Models.Entities;
 
 import java.sql.Time;
 import java.util.List;
+import java.io.Serializable;
 import java.sql.Date;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="schedule")
-public class Schedule {
+public class Schedule implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "schedule_id")

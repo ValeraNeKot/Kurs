@@ -45,13 +45,6 @@ public class ClientSocket {
     public void setUser(User user) {
         this.user = user;
     }
-
-
-	/*
-	 * public int getFlightId() { return FlightId; }
-	 * 
-	 * public void setFlightId(int flightId) { FlightId = flightId; }
-	 */
     
     public PrintWriter getOut() {
         return out;
