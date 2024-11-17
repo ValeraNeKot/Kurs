@@ -8,35 +8,35 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="position")
-public class Position {
+@Table(name="post")
+public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name= "position_id")
-	private int IdPosition;
-	@Column(name= "position_name")
-	private String NamePosition;
+	@Column(name= "post_id")
+	private int IdPost;
+	@Column(name= "post_name")
+	private String NamePost;
 	@Column(name= "responsibility")
 	private String Responsibility;
 	
-	public Position() {};
-	public Position(int idPosition, String namePosition, String responsibility) {
+	public Post() {};
+	public Post(int idPosition, String namePosition, String responsibility) {
 		super();
-		IdPosition = idPosition;
-		NamePosition = namePosition;
+		IdPost = idPosition;
+		NamePost = namePosition;
 		Responsibility = responsibility;
 	}
-	public int getIdPosition() {
-		return IdPosition;
+	public int getIdPost() {
+		return IdPost;
 	}
-	public void setIdPosition(int idPosition) {
-		IdPosition = idPosition;
+	public void setIdPost(int idPost) {
+		IdPost = idPost;
 	}
-	public String getNamePosition() {
-		return NamePosition;
+	public String getNamePost() {
+		return NamePost;
 	}
-	public void setNamePosition(String namePosition) {
-		NamePosition = namePosition;
+	public void setNamePost(String namePost) {
+		NamePost = namePost;
 	}
 	public String getResponsibility() {
 		return Responsibility;
@@ -44,5 +44,5 @@ public class Position {
 	public void setResponsibility(String responsibility) {
 		Responsibility = responsibility;
 	}
-	
+
 }

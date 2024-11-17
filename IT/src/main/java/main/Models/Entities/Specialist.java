@@ -8,56 +8,52 @@ import java.util.List;
 @Table(name="specialist")
 public class Specialist {
 	@Id
-	@OneToOne(mappedBy = "Id")
+	@OneToOne
 	@Column(name ="id")
-    private int Id;
+    private PersonData Id;
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Schedule> Schedules;
 	@OneToOne(mappedBy ="IdAccount")
-	private int IdAccount;
+	private User user;
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "department_id")
 	private Department department;
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "position_id")
-	private Position position;
+	private Post position;
 	@Column(name = "hire_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date hireDate;
 	
 	public Specialist() {};
-	
 
-	public Specialist(int id, List<Schedule> schedules, int idAccount, Department department, Position position,
+	public Specialist(PersonData id, List<Schedule> schedules, User user, Department department, Post position,
 			Date hireDate) {
 		super();
 		Id = id;
 		Schedules = schedules;
-		IdAccount = idAccount;
+		this.user = user;
 		this.department = department;
 		this.position = position;
 		this.hireDate = hireDate;
 	}
 
 
-	public int getId() {
+
+	public PersonData getId() {
 		return Id;
 	}
 
-	public void setId(int id) {
+	public void setId(PersonData id) {
 		Id = id;
 	}
 
-	public int getIdAccount() {
-		return IdAccount;
+	public User getUser() {
+		return user;
 	}
-
-	public void setIdAccount(int idAccount) {
-		IdAccount = idAccount;
+	public void setUser(User user) {
+		this.user = user;
 	}
-
-	
-
 	public Department getDepartment() {
 		return department;
 	}
@@ -68,12 +64,12 @@ public class Specialist {
 	}
 
 
-	public Position getPosition() {
+	public Post getPosition() {
 		return position;
 	}
 
 
-	public void setPosition(Position position) {
+	public void setPosition(Post position) {
 		this.position = position;
 	}
 

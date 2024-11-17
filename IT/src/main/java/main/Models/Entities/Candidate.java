@@ -16,9 +16,9 @@ public class Candidate {
 	@Id
 	@OneToOne(mappedBy = "Id")
 	@Column(name = "id")
-    private int Id;
+    private PersonData Id;
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "position_id")
+	@JoinColumn(name = "post_id")
 	private Vacancy vacancy;
 	@Column(name = "skills")
 	private String Skills;
@@ -29,7 +29,7 @@ public class Candidate {
 	
 	public Candidate() {};
 	
-	public Candidate(int id, Vacancy vacancy, String skills, String education, String pastJobs) {
+	public Candidate(PersonData id, Vacancy vacancy, String skills, String education, String pastJobs) {
 		super();
 		Id = id;
 		this.vacancy = vacancy;
@@ -38,10 +38,11 @@ public class Candidate {
 		PastJobs = pastJobs;
 	}
 
-	public int getId() {
+	public PersonData getId() {
 		return Id;
 	}
-	public void setId(int id) {
+
+	public void setId(PersonData id) {
 		Id = id;
 	}
 
