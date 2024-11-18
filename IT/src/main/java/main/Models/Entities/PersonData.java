@@ -1,83 +1,75 @@
 package main.Models.Entities;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.io.Serializable;
 
-public class PersonData {
+import javax.persistence.*;
+
+@Entity
+@Table(name="person_data")
+public class PersonData implements Serializable{
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
     private int Id;
+	@Column(name="name")
+	private String Name;
+	@Column(name="age")
     private int Age;
+	@Column(name="mail")
     private String Mail;
-    private String Address;
-    private String Sex;
-    private Set<User> Users = new HashSet<>();
-    //private Set<Passenger> Passengers = new HashSet<>();
+	@Column(name="phone_number")
+    private String PhoneNumber;
+	
     public PersonData(){
-
-    }
-    public PersonData(int id, int age, String mail, String address, String sex, Set<User> users
-    		//, Set<Passenger> passengers
-    		) {
-        Id = id;
-        Age = age;
-        Mail = mail;
-        Address = address;
-        Sex = sex;
-        Users = users;
-        //Passengers = passengers;
     }
 
-    public String getSex() {
-        return Sex;
-    }
+    public PersonData(int id, String name, int age, String mail, String phoneNumber) {
+		super();
+		Id = id;
+		Name = name;
+		Age = age;
+		Mail = mail;
+		PhoneNumber = phoneNumber;
+	}
 
-    public void setSex(String sex) {
-        Sex = sex;
-    }
+	public int getId() {
+		return Id;
+	}
 
-    public String getAddress() {
-        return Address;
-    }
+	public void setId(int id) {
+		Id = id;
+	}
 
-    public void setAddress(String address) {
-        Address = address;
-    }
+	public String getName() {
+		return Name;
+	}
 
-    public String getMail() {
-        return Mail;
-    }
+	public void setName(String name) {
+		Name = name;
+	}
 
-    public void setMail(String mail) {
-        Mail = mail;
-    }
+	public int getAge() {
+		return Age;
+	}
 
-    public int getAge() {
-        return Age;
-    }
+	public void setAge(int age) {
+		Age = age;
+	}
 
-    public void setAge(int age) {
-        Age = age;
-    }
+	public String getMail() {
+		return Mail;
+	}
 
-    public int getId() {
-        return Id;
-    }
+	public void setMail(String mail) {
+		Mail = mail;
+	}
 
-    public void setId(int id) {
-        Id = id;
-    }
+	public String getPhoneNumber() {
+		return PhoneNumber;
+	}
 
-	/*
-	 * public Set<Passenger> getPassengers() { return Passengers; }
-	 * 
-	 * public void setPassengers(Set<Passenger> passengers) { Passengers =
-	 * passengers; }
-	 */
+	public void setPhoneNumber(String phoneNumber) {
+		PhoneNumber = phoneNumber;
+	}
 
-    public Set<User> getUsers() {
-        return Users;
-    }
-
-    public void setUsers(Set<User> users) {
-        Users = users;
-    }
 }

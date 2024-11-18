@@ -33,7 +33,7 @@ public class Main {
             currentSockets.add(socket);
             clientHandler = new ClientThread(socket);
             thread = new Thread(clientHandler);
-            //thread.;
+            thread.start();
             System.out.flush();
         }
     }

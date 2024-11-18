@@ -44,8 +44,8 @@ public class ClientThread implements Runnable {
                 String message = in.readLine();
 
                 request = gson.fromJson(message, Request.class);
-
-                switch (request.getRequestType()) {
+//Сюда вызовбизнес логики
+               /* switch (request.getRequestType()) {
                     case REGISTER: {
 
                         User user = gson.fromJson(request.getRequestMessage(), User.class);
@@ -78,6 +78,7 @@ public class ClientThread implements Runnable {
                 }
                 out.println(gson.toJson(response));
                 out.flush();
+                */
             }
         } catch (Exception e) {
             e.printStackTrace();

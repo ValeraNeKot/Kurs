@@ -1,54 +1,53 @@
 package main.Models.Entities;
 
+import java.io.Serializable;
+
+import javax.persistence.*;
+
 import main.Enums.Roles;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
-// POJO
-public class User implements Serializable {
-
-    private int Id;
-    private String Name;
+@Entity
+@Table(name="user")
+public class User implements Serializable{
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="account_id")
+    private int IdAccount;
+	@Column(name="login",length = 45,nullable = false)
     private String Login;
+	@Column(name="password",length = 45, nullable = false)   
     private String Password;
-    private String Role;
-
-    private PersonData personData;
-
-    //private Set<UserMark> UserMarks = new HashSet<>();
+	@Column(name="role",length = 45, nullable = false)   
+    private Roles role;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Specialist specialist;
+    
     public User(){
-
     }
-    public User(int id, String name, String login, String password, String role, PersonData personData
-    		//, Set<UserMark> userMarks
-    		) {
-        Id = id;
-        Name = name;
+    
+    public User(int id, String login, String password, Roles role, Specialist specialist) {
+        IdAccount = id;
         Login = login;
         Password = password;
-        Role = role;
-        this.personData = personData;
-        //UserMarks = userMarks;
+        this.role = role;
+        this.specialist=specialist;
+    }
+    
+    public Specialist getSpecialist() {
+        return specialist;
     }
 
-    public PersonData getPersonData() {
-        return personData;
+    public void setSpecialist(Specialist specialist) {
+        this.specialist = specialist;
     }
-
-    public void setPersonData(PersonData personData) {
-        this.personData = personData;
-    }
-
-    public String getRole() {
-        return Role;
+    
+    public Roles getRole() {
+        return role;
     }
 
     public void setRole(Roles role) {
-        Role = role.toString();
+        this.role = role;
     }
-
     public String getPassword() {
         return Password;
     }
@@ -56,7 +55,7 @@ public class User implements Serializable {
     public void setPassword(String password) {
         Password = password;
     }
-
+    
     public String getLogin() {
         return Login;
     }
@@ -65,25 +64,12 @@ public class User implements Serializable {
         Login = login;
     }
 
-    public String getName() {
-        return Name;
+    public int getIdAccount() {
+        return IdAccount;
     }
 
-    public void setName(String name) {
-        Name = name;
+    public void setIdAccount(int id) {
+        IdAccount = id;
     }
-
-    public int getId() {
-        return Id;
-    }
-
-    public void setId(int id) {
-        Id = id;
-    }
-
-	/*
-	 * public Set<UserMark> getUserMarks() { return UserMarks; }
-	 * 
-	 * public void setUserMarks(Set<UserMark> userMarks) { UserMarks = userMarks; }
-	 */
+    
 }

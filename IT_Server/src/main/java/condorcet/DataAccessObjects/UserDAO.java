@@ -37,7 +37,7 @@ public class UserDAO implements DAO {
     }
 
     @Override
-    public Object findById(int id) {
+    public Object findById(id) {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
         User user = session.get(User.class, id);
         session.close();
