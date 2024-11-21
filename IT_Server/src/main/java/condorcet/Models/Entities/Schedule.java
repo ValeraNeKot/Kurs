@@ -3,32 +3,28 @@ package condorcet.Models.Entities;
 import java.sql.Time;
 import java.util.List;
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.*;
 
 
 @Entity
-@Table(name="schedule")
-public class Schedule implements Serializable{
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "schedule_id")
+@Table(name = "schedule")
+public class Schedule implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "schedule_id")
     private int IdSchedule;
-	@ManyToMany(mappedBy = "Schedules", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "specialist_shedule",
-	joinColumns = {@JoinColumn(name = "schedule_id")},
-	inverseJoinColumns = { @JoinColumn(name = "specialist_id") }
-	)
+    @ManyToMany(mappedBy = "Schedules", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Specialist> Specialists;
 	@Column(name = "date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date date;
 	@Column(name = "begin_time", nullable = false)
-    @Temporal(TemporalType.TIME)
+    //@Temporal(TemporalType.TIME)
     private Time BeginTime;
 	@Column(name = "end_time", nullable = false)
-    @Temporal(TemporalType.TIME)
+    //@Temporal(TemporalType.TIME)
     private Time EndTime;
 	
 	public Schedule() {};

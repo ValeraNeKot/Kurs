@@ -23,7 +23,6 @@ public class Post implements Serializable{
 	
 	public Post() {};
 	public Post(int idPosition, String namePosition, String responsibility) {
-		super();
 		IdPost = idPosition;
 		NamePost = namePosition;
 		Responsibility = responsibility;

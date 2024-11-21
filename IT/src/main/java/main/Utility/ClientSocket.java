@@ -19,6 +19,7 @@ public class ClientSocket {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
         } catch (Exception e) {
+        	System.out.println("Пиздец");
         }
     }
 

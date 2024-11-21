@@ -3,25 +3,31 @@ package condorcet.Models.Entities;
 import javax.persistence.*;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name="specialist")
-public class Specialist implements Serializable{
-	@Id
-	@OneToOne
-	@Column(name ="id")
+@Table(name = "specialist")
+public class Specialist implements Serializable {
+    @Id
+    @OneToOne
+    @JoinColumn(name = "person_id")
     private PersonData Id;
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Schedule> Schedules;
-	@OneToOne(mappedBy ="IdAccount")
-	private User user;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "specialist_schedule",  // Таблица соединения
+        joinColumns = @JoinColumn(name = "specialist_id"),  // Внешний ключ для специалиста
+        inverseJoinColumns = @JoinColumn(name = "schedule_id")  // Внешний ключ для расписания
+    )
+    private List<Schedule> Schedules;
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "account_id") // Связь с User
+    private User user;
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "department_id")
 	private Department department;
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "position_id")
+	@JoinColumn(name = "post_id")
 	private Post position;
 	@Column(name = "hire_date", nullable = false)
     @Temporal(TemporalType.DATE)

@@ -1,6 +1,7 @@
 package condorcet.DataAccessObjects;
 
 import condorcet.Interfaces.DAO;
+//import condorcet.Models.Entities.PersonData;
 import condorcet.Models.Entities.User;
 import condorcet.Utility.HibernateSessionFactory;
 import org.hibernate.Session;
@@ -37,7 +38,7 @@ public class UserDAO implements DAO {
     }
 
     @Override
-    public Object findById(id) {
+    public Object findById(int id) {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
         User user = session.get(User.class, id);
         session.close();

@@ -3,6 +3,8 @@ package condorcet;
 import condorcet.Utility.ClientThread;
 
 import java.io.IOException;
+import java.net.BindException;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -18,7 +20,9 @@ public class Main {
 
      
     public static void main(String[] args) throws IOException {
-        serverSocket = new ServerSocket(PORT_NUMBER);
+    	try (ServerSocket serverSocket = new ServerSocket()) {
+        serverSocket.setReuseAddress(true);
+        serverSocket.bind(new InetSocketAddress(PORT_NUMBER));
         while (true) {
             for (Socket socket :
                     currentSockets) {
@@ -35,7 +39,11 @@ public class Main {
             thread = new Thread(clientHandler);
             thread.start();
             System.out.flush();
-        }
+        }} catch (BindException e) {
+            System.err.println("Порт занят, пытаюсь перезапустить сервер...");
+            Thread.currentThread().interrupt(); // Восстанавливаем статус прерывания
+            System.err.println("Ошибка: поток был прерван.");
+            }
     }
 
     protected void finalize() throws IOException {

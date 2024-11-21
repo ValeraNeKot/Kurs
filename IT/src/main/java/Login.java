@@ -37,16 +37,20 @@ public class Login {
         requestModel.setRequestType(RequestType.LOGIN);
         ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
         ClientSocket.getInstance().getOut().flush();
+        
         String answer = ClientSocket.getInstance().getInStream().readLine();
         Response responseModel = new Gson().fromJson(answer, Response.class);
         if (responseModel.getResponseStatus() == ResponseStatus.OK) {
             labelMessage.setVisible(false);
-            ClientSocket.getInstance().setUser(new Gson().fromJson(responseModel.getResponseData(), User.class));
-            Stage stage = (Stage) buttonLogin.getScene().getWindow();
+            System.out.println("Получилось");
 			/*
-			 * Parent root; root = FXMLLoader.load(getClass().getResource("/Flights.fxml"));
-			 * Scene newScene = new Scene(root); stage.setScene(newScene);
+			 * ClientSocket.getInstance().setUser(new
+			 * Gson().fromJson(responseModel.getResponseData(), User.class)); Stage stage =
+			 * (Stage) buttonLogin.getScene().getWindow(); Parent root; root =
+			 * FXMLLoader.load(getClass().getResource("/Login.fxml")); Scene newScene = new
+			 * Scene(root); stage.setScene(newScene);
 			 */
+			 
         } else {
             labelMessage.setVisible(true);
         }

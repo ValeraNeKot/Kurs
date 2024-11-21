@@ -45,8 +45,8 @@ public class ClientThread implements Runnable {
 
                 request = gson.fromJson(message, Request.class);
 //Сюда вызовбизнес логики
-               /* switch (request.getRequestType()) {
-                    case REGISTER: {
+                switch (request.getRequestType()) {
+                    /*case REGISTER: {
 
                         User user = gson.fromJson(request.getRequestMessage(), User.class);
 
@@ -62,12 +62,12 @@ public class ClientThread implements Runnable {
                             response = new Response(ResponseStatus.ERROR, "Такой пользователь уже существует!", "");
                         }
                         break;
-                    }
+                    }*/
                     case LOGIN: {
                         User requestUser = gson.fromJson(request.getRequestMessage(), User.class);
                         if (userService.findAllEntities().stream().anyMatch(x -> x.getLogin().toLowerCase().equals(requestUser.getLogin().toLowerCase())) && userService.findAllEntities().stream().anyMatch(x -> x.getPassword().equals(requestUser.getPassword()))) {
                             User user = userService.findAllEntities().stream().filter(x -> x.getLogin().toLowerCase().equals(requestUser.getLogin().toLowerCase())).findFirst().get();
-                            user = userService.findEntity(user.getId());
+                            user = userService.findEntity(user.getIdAccount());
                             response = new Response(ResponseStatus.OK, "Готово!", gson.toJson(user));
                         } else {
                             response = new Response(ResponseStatus.ERROR, "Такого пользователя не существует или неправильный пароль!", "");
@@ -78,7 +78,7 @@ public class ClientThread implements Runnable {
                 }
                 out.println(gson.toJson(response));
                 out.flush();
-                */
+                
             }
         } catch (Exception e) {
             e.printStackTrace();

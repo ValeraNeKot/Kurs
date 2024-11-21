@@ -1,7 +1,6 @@
 package condorcet.DataAccessObjects;
 
 import condorcet.Interfaces.DAO;
-//import condorcet.Models.Entities.Aircraft;
 import condorcet.Models.Entities.PersonData;
 import condorcet.Utility.HibernateSessionFactory;
 import org.hibernate.Session;
