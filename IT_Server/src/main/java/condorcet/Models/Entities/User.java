@@ -18,6 +18,7 @@ public class User implements Serializable{
 	@Column(name="password",length = 45, nullable = false)   
     private String Password;
 	@Column(name="role",length = 45, nullable = false)   
+	@Enumerated(EnumType.STRING) 
     private Roles role;
 	 @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	    private Specialist specialist;

@@ -1,6 +1,7 @@
 package condorcet.Models.Entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,7 +18,7 @@ import javax.persistence.Table;
 public class Candidate implements Serializable {
     @Id
     @OneToOne
-    @JoinColumn(name = "person_id") // Убедитесь, что у PersonData есть соответствующий идентификатор
+    @JoinColumn(name = "person_id", referencedColumnName = "person_id") // Убедитесь, что у PersonData есть соответствующий идентификатор
     private PersonData id;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "vacancy_id", referencedColumnName = "vacancy_id") // Укажите правильный внешний ключ
@@ -40,6 +41,27 @@ public class Candidate implements Serializable {
 		this.skills = skills;
 		this.education = education;
 		this.pastJobs = pastJobs;
+	}
+
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(education, id, pastJobs, skills, vacancy);
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Candidate other = (Candidate) obj;
+		return Objects.equals(education, other.education) && Objects.equals(id, other.id)
+				&& Objects.equals(pastJobs, other.pastJobs) && Objects.equals(skills, other.skills)
+				&& Objects.equals(vacancy, other.vacancy);
 	}
 
 

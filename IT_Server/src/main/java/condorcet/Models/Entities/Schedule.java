@@ -15,7 +15,7 @@ public class Schedule implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "schedule_id")
     private int IdSchedule;
-    @ManyToMany(mappedBy = "Schedules", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "Schedules", fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
     private List<Specialist> Specialists;
 	@Column(name = "date", nullable = false)
     @Temporal(TemporalType.DATE)

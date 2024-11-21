@@ -5,23 +5,24 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "specialist")
 public class Specialist implements Serializable {
-    @Id
+	@Id
     @OneToOne
-    @JoinColumn(name = "person_id")
-    private PersonData Id;
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "person_id", referencedColumnName = "person_id")
+    private PersonData personData;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
         name = "specialist_schedule",  // Таблица соединения
-        joinColumns = @JoinColumn(name = "specialist_id"),  // Внешний ключ для специалиста
+        joinColumns = @JoinColumn(name = "person_id"),  // Внешний ключ для специалиста
         inverseJoinColumns = @JoinColumn(name = "schedule_id")  // Внешний ключ для расписания
     )
     private List<Schedule> Schedules;
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "account_id") // Связь с User
+    @JoinColumn(name = "account_id") // Связь с User
     private User user;
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "department_id")
@@ -38,7 +39,7 @@ public class Specialist implements Serializable {
 	public Specialist(PersonData id, List<Schedule> schedules, User user, Department department, Post position,
 			Date hireDate) {
 		super();
-		Id = id;
+		personData = id;
 		Schedules = schedules;
 		this.user = user;
 		this.department = department;
@@ -48,12 +49,25 @@ public class Specialist implements Serializable {
 
 
 
-	public PersonData getId() {
-		return Id;
+
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(Schedules, department, hireDate, personData, position, user);
 	}
 
-	public void setId(PersonData id) {
-		Id = id;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Specialist other = (Specialist) obj;
+		return Objects.equals(Schedules, other.Schedules) && Objects.equals(department, other.department)
+				&& Objects.equals(hireDate, other.hireDate) && Objects.equals(personData, other.personData)
+				&& Objects.equals(position, other.position) && Objects.equals(user, other.user);
 	}
 
 	public User getUser() {
