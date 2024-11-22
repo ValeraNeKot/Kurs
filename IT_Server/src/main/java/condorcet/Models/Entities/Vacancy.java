@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table(name = "vacancy")
 public class Vacancy implements Serializable {
@@ -19,13 +21,16 @@ public class Vacancy implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "vacancy_id") // Добавьте уникальный идентификатор для Vacancy
+    @Expose
     private Long id;
 
     @OneToOne
     @JoinColumn(name = "post_id")
+    @Expose
     private Post post;
 
     @Column(name = "number")
+    @Expose
     private int number;
     
 	public Vacancy() {};

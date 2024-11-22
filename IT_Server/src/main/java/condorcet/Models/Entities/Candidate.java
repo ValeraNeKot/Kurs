@@ -13,21 +13,28 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table(name = "candidate")
 public class Candidate implements Serializable {
     @Id
     @OneToOne
     @JoinColumn(name = "person_id", referencedColumnName = "person_id") // Убедитесь, что у PersonData есть соответствующий идентификатор
+    @Expose
     private PersonData id;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "vacancy_id", referencedColumnName = "vacancy_id") // Укажите правильный внешний ключ
+    @Expose
     private Vacancy vacancy;
     @Column(name = "skills")
+    @Expose
     private String skills;
     @Column(name = "education")
+    @Expose
     private String education;
     @Column(name = "past_jobs")
+    @Expose
     private String pastJobs;
 
 	

@@ -7,6 +7,8 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import com.google.gson.annotations.Expose;
+
 
 @Entity
 @Table(name = "schedule")
@@ -14,17 +16,21 @@ public class Schedule implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "schedule_id")
+    @Expose
     private int IdSchedule;
     @ManyToMany(mappedBy = "Schedules", fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
     private List<Specialist> Specialists;
 	@Column(name = "date", nullable = false)
     @Temporal(TemporalType.DATE)
+	@Expose
     private Date date;
 	@Column(name = "begin_time", nullable = false)
     //@Temporal(TemporalType.TIME)
+	@Expose
     private Time BeginTime;
 	@Column(name = "end_time", nullable = false)
     //@Temporal(TemporalType.TIME)
+	@Expose
     private Time EndTime;
 	
 	public Schedule() {};

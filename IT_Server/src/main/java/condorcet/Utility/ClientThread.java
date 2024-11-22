@@ -1,6 +1,8 @@
 package condorcet.Utility;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import condorcet.Enums.ResponseStatus;
 import condorcet.Models.Entities.*;
 //import condorcet.Models.ResultMark;
@@ -32,7 +34,7 @@ public class ClientThread implements Runnable {
         response = new Response();
         request = new Request();
         this.clientSocket = clientSocket;
-        gson = new Gson();
+        gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         out = new PrintWriter(clientSocket.getOutputStream());
     }
@@ -44,7 +46,6 @@ public class ClientThread implements Runnable {
                 String message = in.readLine();
 
                 request = gson.fromJson(message, Request.class);
-//Сюда вызовбизнес логики
                 switch (request.getRequestType()) {
                     /*case REGISTER: {
 

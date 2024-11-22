@@ -2,6 +2,8 @@ package condorcet.Models.Entities;
 
 import javax.persistence.*;
 
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +15,7 @@ public class Specialist implements Serializable {
 	@Id
     @OneToOne
     @JoinColumn(name = "person_id", referencedColumnName = "person_id")
+	@Expose
     private PersonData personData;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
@@ -20,18 +23,23 @@ public class Specialist implements Serializable {
         joinColumns = @JoinColumn(name = "person_id"),  // Внешний ключ для специалиста
         inverseJoinColumns = @JoinColumn(name = "schedule_id")  // Внешний ключ для расписания
     )
+    @Expose
     private List<Schedule> Schedules;
     @OneToOne
     @JoinColumn(name = "account_id") // Связь с User
+    @Expose
     private User user;
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "department_id")
+	@Expose
 	private Department department;
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "post_id")
+	@Expose
 	private Post position;
 	@Column(name = "hire_date", nullable = false)
     @Temporal(TemporalType.DATE)
+	@Expose
     private Date hireDate;
 	
 	public Specialist() {};

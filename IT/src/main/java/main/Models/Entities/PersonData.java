@@ -4,20 +4,18 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name="person_data")
+import com.google.gson.annotations.Expose;
+
 public class PersonData implements Serializable{
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Expose
     private int Id;
-	@Column(name="name")
+	@Expose
 	private String Name;
-	@Column(name="age")
+	@Expose
     private int Age;
-	@Column(name="mail")
+	@Expose
     private String Mail;
-	@Column(name="phone_number")
+	@Expose
     private String PhoneNumber;
 	
     public PersonData(){
@@ -72,4 +70,5 @@ public class PersonData implements Serializable{
 		PhoneNumber = phoneNumber;
 	}
 
+	
 }

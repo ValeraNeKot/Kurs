@@ -1,9 +1,13 @@
 package condorcet.Models.TCP;
 
+import com.google.gson.annotations.Expose;
+
 import condorcet.Enums.RequestType;
 
 public class Request {
+	@Expose
     private RequestType requestType;
+	@Expose
     private String requestMessage;
 
     public Request(RequestType requestType, String requestMessage) {
