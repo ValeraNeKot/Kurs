@@ -1,6 +1,8 @@
 package condorcet.Utility;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import condorcet.Enums.ResponseStatus;
 import condorcet.Models.Entities.*;
 //import condorcet.Models.ResultMark;
@@ -32,7 +34,7 @@ public class ClientThread implements Runnable {
         response = new Response();
         request = new Request();
         this.clientSocket = clientSocket;
-        gson = new Gson();
+        gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         out = new PrintWriter(clientSocket.getOutputStream());
     }
@@ -44,9 +46,8 @@ public class ClientThread implements Runnable {
                 String message = in.readLine();
 
                 request = gson.fromJson(message, Request.class);
-//Сюда вызовбизнес логики
-               /* switch (request.getRequestType()) {
-                    case REGISTER: {
+                switch (request.getRequestType()) {
+                    /*case REGISTER: {
 
                         User user = gson.fromJson(request.getRequestMessage(), User.class);
 
@@ -62,23 +63,31 @@ public class ClientThread implements Runnable {
                             response = new Response(ResponseStatus.ERROR, "Такой пользователь уже существует!", "");
                         }
                         break;
-                    }
+                    }*/
                     case LOGIN: {
+                    	// Инициализация администраторской учетной записи
+                        DatabaseInitializer dbInitializer = new DatabaseInitializer(userService);
+                        dbInitializer.initializeAdminAccount();
+                        
                         User requestUser = gson.fromJson(request.getRequestMessage(), User.class);
                         if (userService.findAllEntities().stream().anyMatch(x -> x.getLogin().toLowerCase().equals(requestUser.getLogin().toLowerCase())) && userService.findAllEntities().stream().anyMatch(x -> x.getPassword().equals(requestUser.getPassword()))) {
                             User user = userService.findAllEntities().stream().filter(x -> x.getLogin().toLowerCase().equals(requestUser.getLogin().toLowerCase())).findFirst().get();
-                            user = userService.findEntity(user.getId());
+                            user = userService.findEntity(user.getIdAccount());
                             response = new Response(ResponseStatus.OK, "Готово!", gson.toJson(user));
                         } else {
                             response = new Response(ResponseStatus.ERROR, "Такого пользователя не существует или неправильный пароль!", "");
                         }
                         break;
                     }
-                   
+                    
+                    case WORKER_UPDATE: {
+                    	System.err.println("Типа обнова");
+                    	///TO_DO: Придумай как обновить профиль таким образом, чтобы не поломать связи с другими таблицами
+                    }
                 }
                 out.println(gson.toJson(response));
                 out.flush();
-                */
+                
             }
         } catch (Exception e) {
             e.printStackTrace();

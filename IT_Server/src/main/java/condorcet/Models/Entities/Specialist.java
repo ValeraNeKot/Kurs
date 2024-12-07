@@ -2,52 +2,69 @@ package condorcet.Models.Entities;
 
 import javax.persistence.*;
 
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Table(name="specialist")
-public class Specialist implements Serializable{
+@Table(name = "specialist")
+public class Specialist implements Serializable {
 	@Id
-	@OneToOne
-	@Column(name ="id")
-    private PersonData Id;
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Schedule> Schedules;
-	@OneToOne(mappedBy ="IdAccount")
-	private User user;
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne
+    @JoinColumn(name = "person_id", referencedColumnName = "person_id")
+	@Expose
+    private PersonData personData;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+        name = "specialist_schedule",  // Таблица соединения
+        joinColumns = @JoinColumn(name = "person_id"),  // Внешний ключ для специалиста
+        inverseJoinColumns = @JoinColumn(name = "schedule_id")  // Внешний ключ для расписания
+    )
+    @Expose
+    private List<Schedule> Schedules;
+    @OneToOne
+    @JoinColumn(name = "account_id") // Связь с User
+    private User user;
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "department_id")
+	@Expose
 	private Department department;
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "position_id")
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "post_id")
+	@Expose
 	private Post position;
-	@Column(name = "hire_date", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date hireDate;
 	
 	public Specialist() {};
 
-	public Specialist(PersonData id, List<Schedule> schedules, User user, Department department, Post position,
-			Date hireDate) {
+	public Specialist(PersonData id, List<Schedule> schedules, User user, Department department, Post position) {
 		super();
-		Id = id;
+		personData = id;
 		Schedules = schedules;
 		this.user = user;
 		this.department = department;
 		this.position = position;
-		this.hireDate = hireDate;
 	}
 
-
-
-	public PersonData getId() {
-		return Id;
+	@Override
+	public int hashCode() {
+		return Objects.hash(Schedules, department, personData, position, user);
 	}
 
-	public void setId(PersonData id) {
-		Id = id;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Specialist other = (Specialist) obj;
+		return Objects.equals(Schedules, other.Schedules) && Objects.equals(department, other.department)
+			 && Objects.equals(personData, other.personData)
+				&& Objects.equals(position, other.position) && Objects.equals(user, other.user);
 	}
 
 	public User getUser() {
@@ -74,16 +91,6 @@ public class Specialist implements Serializable{
 	public void setPosition(Post position) {
 		this.position = position;
 	}
-
-
-	public Date getHireDate() {
-		return hireDate;
-	}
-
-	public void setHireDate(Date hireDate) {
-		this.hireDate = hireDate;
-	}
-
 
 
 	public List<Schedule> getSchedules() {

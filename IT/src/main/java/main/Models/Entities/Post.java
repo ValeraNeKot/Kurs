@@ -9,21 +9,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
-@Table(name="post")
+import com.google.gson.annotations.Expose;
+
+
 public class Post implements Serializable{
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name= "post_id")
+	@Expose
 	private int IdPost;
-	@Column(name= "post_name")
+	@Expose
 	private String NamePost;
-	@Column(name= "responsibility")
+	@Expose
 	private String Responsibility;
 	
 	public Post() {};
 	public Post(int idPosition, String namePosition, String responsibility) {
-		super();
 		IdPost = idPosition;
 		NamePost = namePosition;
 		Responsibility = responsibility;

@@ -5,6 +5,7 @@ import condorcet.Interfaces.DAO;
 import condorcet.Interfaces.Service;
 //import condorcet.Models.Entities.Passenger;
 import condorcet.Models.Entities.PersonData;
+import condorcet.Models.Entities.Specialist;
 import condorcet.Models.Entities.User;
 //import condorcet.Models.Entities.UserMark;
 
@@ -17,8 +18,8 @@ public class UserService implements Service<User> {
     @Override
     public User findEntity(int id) {
         User entity = (User) daoService.findById(id);
-        if (entity.getPersonData() != null) {
-           /* for (Passenger passenger : entity.getPersonData().getPassengers()) {
+        /*if (entity != null) {
+           for (Specialist specialist : entity.getSpecialist()) {
                 passenger.setPersonData(null);
                 passenger.getFlight().setUserMarks(null);
                 passenger.getFlight().setAircraft(null);
@@ -38,8 +39,7 @@ public class UserService implements Service<User> {
             tempUser.setRole(userMark.getUser().getRole());
             userMark.setUser(tempUser);
         }
-        */
-        }
+        }*/
         return entity;
     }
 

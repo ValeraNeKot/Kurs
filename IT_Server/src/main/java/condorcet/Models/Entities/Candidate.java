@@ -1,6 +1,7 @@
 package condorcet.Models.Entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,67 +13,114 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
-@Table(name="candidate")
-public class Candidate implements Serializable{
-	@Id
-	@OneToOne(mappedBy = "Id")
-	@Column(name = "id")
-    private PersonData Id;
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "post_id")
-	private Vacancy vacancy;
-	@Column(name = "skills")
-	private String Skills;
-	@Column(name = "education")
-	private String Education;
-	@Column(name = "past_jobs")
-	private String PastJobs;
+@Table(name = "candidate")
+public class Candidate implements Serializable {
+    @Id
+    @OneToOne
+    @JoinColumn(name = "person_id", referencedColumnName = "person_id") // Убедитесь, что у PersonData есть соответствующий идентификатор
+    @Expose
+    private PersonData id;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "vacancy_id", referencedColumnName = "vacancy_id") // Укажите правильный внешний ключ
+    @Expose
+    private Vacancy vacancy;
+    @Column(name = "skills")
+    @Expose
+    private String skills;
+    @Column(name = "education")
+    @Expose
+    private String education;
+    @Column(name = "past_jobs")
+    @Expose
+    private String pastJobs;
+
 	
-	public Candidate() {};
-	
+	public Candidate() {}
+
+
 	public Candidate(PersonData id, Vacancy vacancy, String skills, String education, String pastJobs) {
 		super();
-		Id = id;
+		this.id = id;
 		this.vacancy = vacancy;
-		Skills = skills;
-		Education = education;
-		PastJobs = pastJobs;
+		this.skills = skills;
+		this.education = education;
+		this.pastJobs = pastJobs;
 	}
+
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(education, id, pastJobs, skills, vacancy);
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Candidate other = (Candidate) obj;
+		return Objects.equals(education, other.education) && Objects.equals(id, other.id)
+				&& Objects.equals(pastJobs, other.pastJobs) && Objects.equals(skills, other.skills)
+				&& Objects.equals(vacancy, other.vacancy);
+	}
+
 
 	public PersonData getId() {
-		return Id;
+		return id;
 	}
 
+
 	public void setId(PersonData id) {
-		Id = id;
+		this.id = id;
 	}
+
 
 	public Vacancy getVacancy() {
 		return vacancy;
 	}
 
+
 	public void setVacancy(Vacancy vacancy) {
 		this.vacancy = vacancy;
 	}
 
+
 	public String getSkills() {
-		return Skills;
+		return skills;
 	}
+
+
 	public void setSkills(String skills) {
-		Skills = skills;
+		this.skills = skills;
 	}
+
+
 	public String getEducation() {
-		return Education;
+		return education;
 	}
+
+
 	public void setEducation(String education) {
-		Education = education;
+		this.education = education;
 	}
+
+
 	public String getPastJobs() {
-		return PastJobs;
+		return pastJobs;
 	}
+
+
 	public void setPastJobs(String pastJobs) {
-		PastJobs = pastJobs;
-	}
+		this.pastJobs = pastJobs;
+	};
+	
+	
 	
 }

@@ -9,14 +9,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
-@Table(name="department")
+import com.google.gson.annotations.Expose;
+
 public class Department implements Serializable{
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name= "department_id")
+	@Expose
 	private int IdDepartment;
-	@Column(name= "department_name")
+	@Expose
 	private String NameDepartment;
 	
 	public Department() {};

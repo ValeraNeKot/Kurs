@@ -1,9 +1,13 @@
 package main.Models.TCP;
 
+import com.google.gson.annotations.Expose;
+
 import main.Enums.RequestType;
 
 public class Request {
+	@Expose
     private RequestType requestType;
+	@Expose
     private String requestMessage;
 
     public Request(RequestType requestType, String requestMessage) {

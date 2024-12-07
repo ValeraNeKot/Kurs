@@ -1,10 +1,15 @@
 package main.Models.TCP;
 
+import com.google.gson.annotations.Expose;
+
 import main.Enums.ResponseStatus;
 
 public class Response {
+	@Expose
     private ResponseStatus responseStatus;
+	@Expose
     private String responseMessage;
+	@Expose
     private String responseData;
     public Response(ResponseStatus responseStatus, String responseMessage,String responseData) {
         this.responseStatus = responseStatus;

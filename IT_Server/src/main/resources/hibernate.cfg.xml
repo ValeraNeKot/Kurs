@@ -7,22 +7,22 @@
     <session-factory>
         <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://localhost:3306/condorcet?serverTimezone=UTC</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/IT?serverTimezone=UTC</property>
         <property name="connection.username">root</property>
         <property name="connection.password">bb8c3po@kukulera</property>
         <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
         <property name="current_session_context_class">thread</property>
         <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
         <property name="show_sql">false</property>
-
-		<mapping class="main.Models.Entities.Candidate"/>
-        <mapping class="main.Models.Entities.Department"/>
-        <mapping class="main.Models.Entities.PersoneData"/>
-        <mapping class="main.Models.Entities.Post"/>
-        <mapping class="main.Models.Entities.Schedule"/>
-        <mapping class="main.Models.Entities.Specialist"/>
-        <mapping class="main.Models.Entities.User"/>
-        <mapping class="main.Models.Entities.Vacancy"/>
+        
+		<mapping class="condorcet.Models.Entities.Candidate"/>
+        <mapping class="condorcet.Models.Entities.Department"/>
+        <mapping class="condorcet.Models.Entities.PersonData"/>
+        <mapping class="condorcet.Models.Entities.Post"/>
+        <mapping class="condorcet.Models.Entities.Schedule"/>
+        <mapping class="condorcet.Models.Entities.Specialist"/>
+        <mapping class="condorcet.Models.Entities.User"/>
+        <mapping class="condorcet.Models.Entities.Vacancy"/>
 
     </session-factory>
 

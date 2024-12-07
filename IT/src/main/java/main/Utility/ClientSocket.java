@@ -13,12 +13,14 @@ public class ClientSocket {
     private static Socket socket;
     private BufferedReader in;
     private PrintWriter out;
+    
     private ClientSocket() {
         try {
             socket = new Socket("localhost", 5555);
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream());
         } catch (Exception e) {
+        	System.out.println("Ошибка подключения");
         }
     }
 
