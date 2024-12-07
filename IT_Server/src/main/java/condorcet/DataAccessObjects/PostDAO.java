@@ -6,7 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import condorcet.Interfaces.DAO;
-import condorcet.Models.Entities.User;
+import condorcet.Models.Entities.Post;
 import condorcet.Utility.HibernateSessionFactory;
 
 public class PostDAO implements DAO{
@@ -40,7 +40,7 @@ public class PostDAO implements DAO{
 	    @Override
 	    public Object findById(int id) {
 	        Session session = HibernateSessionFactory.getSessionFactory().openSession();
-	        User user = session.get(User.class, id);
+	        Post user = session.get(Post.class, id);
 	        session.close();
 	        return user;
 	    }
@@ -48,7 +48,7 @@ public class PostDAO implements DAO{
 	    @Override
 	    public List findAll() {
 	        Session session =   HibernateSessionFactory.getSessionFactory().openSession();
-	        List<Object> users = (List<Object>)session.createQuery("From User").list();
+	        List<Object> users = (List<Object>)session.createQuery("From Post").list();
 	        session.close();
 	        return users;
 	    }

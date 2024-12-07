@@ -6,10 +6,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import condorcet.Interfaces.DAO;
-import condorcet.Models.Entities.User;
+import condorcet.Models.Entities.Schedule;
 import condorcet.Utility.HibernateSessionFactory;
 
-public class SceduleDAO implements DAO{
+public class ScheduleDAO implements DAO{
 	 @Override
 	    public void save(Object obj) {
 	        Session session = HibernateSessionFactory.getSessionFactory().openSession();
@@ -40,7 +40,7 @@ public class SceduleDAO implements DAO{
 	    @Override
 	    public Object findById(int id) {
 	        Session session = HibernateSessionFactory.getSessionFactory().openSession();
-	        User user = session.get(User.class, id);
+	        Schedule user = session.get(Schedule.class, id);
 	        session.close();
 	        return user;
 	    }
@@ -48,7 +48,7 @@ public class SceduleDAO implements DAO{
 	    @Override
 	    public List findAll() {
 	        Session session =   HibernateSessionFactory.getSessionFactory().openSession();
-	        List<Object> users = (List<Object>)session.createQuery("From User").list();
+	        List<Object> users = (List<Object>)session.createQuery("From Schedule").list();
 	        session.close();
 	        return users;
 	    }

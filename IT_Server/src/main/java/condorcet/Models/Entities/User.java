@@ -26,9 +26,9 @@ public class User implements Serializable{
 	@Enumerated(EnumType.STRING) 
 	@Expose
     private Roles role;
-	 @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	 @Expose
-	    private Specialist specialist;
+	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Expose
+	private Specialist specialist;
     public User(){
     }
     

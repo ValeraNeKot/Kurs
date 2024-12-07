@@ -50,6 +50,8 @@ public class Worker {
     private Button saveButton;
     @FXML
     private Button showPasswordButton;
+    @FXML
+    private Button Exit;
 
     @FXML
     private void initialize() {
@@ -73,8 +75,13 @@ public class Worker {
     }
     
     @FXML
-    private void back() {
-    	
+    private void back() throws IOException {
+    	ClientSocket.getInstance().setUser(null); 
+		Stage stage = (Stage) Exit.getScene().getWindow(); 
+		Parent root;
+		root = FXMLLoader.load(getClass().getResource("/Login.fxml"));
+		Scene newScene = new Scene(root); 
+		stage.setScene(newScene);
     }
     /**
      * Загружает данные текущего пользователя в поля.

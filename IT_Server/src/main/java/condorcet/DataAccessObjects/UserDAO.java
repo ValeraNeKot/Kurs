@@ -9,7 +9,7 @@ import org.hibernate.Transaction;
 
 import java.util.List;
 
-public class UserDAO implements DAO {
+public class UserDAO implements DAO{
     @Override
     public void save(Object obj) {
         Session session = HibernateSessionFactory.getSessionFactory().openSession();
