@@ -20,10 +20,9 @@ public class Schedule implements Serializable {
     private int IdSchedule;
     @ManyToMany(mappedBy = "Schedules", fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
     private List<Specialist> Specialists;
-	@Column(name = "date", nullable = false)
-    @Temporal(TemporalType.DATE)
+	@Column(name = "days", nullable = false)
 	@Expose
-    private Date date;
+    private String days;
 	@Column(name = "begin_time", nullable = false)
     //@Temporal(TemporalType.TIME)
 	@Expose
@@ -35,10 +34,10 @@ public class Schedule implements Serializable {
 	
 	public Schedule() {};
 
-	public Schedule(int idSchedule, List<Specialist> specialists, Date date, Time beginTime, Time endTime) {
+	public Schedule(int idSchedule, List<Specialist> specialists, String date, Time beginTime, Time endTime) {
 		IdSchedule = idSchedule;
 		Specialists = specialists;
-		this.date = date;
+		this.days = date;
 		BeginTime = beginTime;
 		EndTime = endTime;
 	}
@@ -58,12 +57,14 @@ public class Schedule implements Serializable {
 		IdSchedule = idSchedule;
 	}
 
-	public Date getDate() {
-		return date;
+	public String getDays() {
+		return days;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+
+	public void setDays(String days) {
+		this.days = days;
 	}
+
 	public Time getBeginTime() {
 		return BeginTime;
 	}

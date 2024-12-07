@@ -1,4 +1,7 @@
 import com.google.gson.Gson;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -6,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -13,17 +17,24 @@ import javafx.stage.Stage;
 import main.Enums.RequestType;
 import main.Enums.ResponseStatus;
 import main.Enums.Roles;
+import main.Models.Entities.Schedule;
 import main.Models.Entities.User;
 import main.Models.TCP.Request;
 import main.Models.TCP.Response;
 import main.Utility.ClientSocket;
 
 import java.io.IOException;
+import java.sql.Time;
+import java.util.List;
 
 public class Worker {
 
     @FXML
     private AnchorPane profilePane;
+    @FXML
+    private AnchorPane schedulePane;
+    @FXML
+    private ListView<String> scheduleListView;
     @FXML
     private TextField loginField;
     @FXML
@@ -56,28 +67,60 @@ public class Worker {
     @FXML
     private void initialize() {
         profilePane.setVisible(false); // Панель профиля скрыта при запуске
+        schedulePane.setVisible(false);
     }
 
-    /**
-     * Обработчик для отображения панели профиля.
-     */
     @FXML
     private void profil_vis() {
-        profilePane.setVisible(true);
+        profilePane.setVisible(true);  // Включаем видимость панели профиля
+        schedulePane.setVisible(false); // Отключаем видимость панели расписания
         loadProfileData();
     }
+
     @FXML
     private void schedule_vis() {
+        schedulePane.setVisible(true); // Включаем видимость панели расписания
+        profilePane.setVisible(false); // Отключаем видимость панели профиля
+        loadScheduleData();
     }
     
     @FXML
     private void report_vis() {
     }
     
+    private void loadScheduleData() {
+        if (ClientSocket.getInstance().getUser().getSpecialist() != null && ClientSocket.getInstance().getUser().getSpecialist().getSchedules() != null) {
+            List<Schedule> schedules = ClientSocket.getInstance().getUser().getSpecialist().getSchedules();
+            ObservableList<String> scheduleItems = FXCollections.observableArrayList();
+
+            for (Schedule schedule : schedules) {
+                String scheduleInfo = formatSchedule(schedule);
+                scheduleItems.add(scheduleInfo);
+            }
+
+            scheduleListView.setItems(scheduleItems);
+        }
+    }
+
+    /**
+     * Форматирует график для отображения в списке.
+     *
+     * @param schedule График
+     * @return Отформатированная строка
+     */
+    private String formatSchedule(Schedule schedule) {
+        Time beginTime = schedule.getBeginTime();
+        Time endTime = schedule.getEndTime();
+        String days = schedule.getDays();
+
+        return String.format("%s: %s - %s", days, beginTime.toString(), endTime.toString());
+    }
+    
     @FXML
     private void back() throws IOException {
     	ClientSocket.getInstance().setUser(null); 
-		Stage stage = (Stage) Exit.getScene().getWindow(); 
+		Stage stage = (Stage) 
+		Exit.getScene().getWindow(); 
 		Parent root;
 		root = FXMLLoader.load(getClass().getResource("/Login.fxml"));
 		Scene newScene = new Scene(root); 
@@ -128,7 +171,7 @@ public class Worker {
         	ClientSocket.getInstance().getUser().setLogin(loginField.getText());
         	if(passwordField.isVisible()==true) ClientSocket.getInstance().getUser().setPassword(passwordField.getText());
         	else ClientSocket.getInstance().getUser().setPassword(visiblePasswordField.getText());
-        	
+
             //userService.updateUser(currentUser); // Сохранение в базе данных
         	Request requestModel = new Request();
             requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser()));

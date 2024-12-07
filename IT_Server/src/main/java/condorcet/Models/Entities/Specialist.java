@@ -13,8 +13,8 @@ import java.util.Objects;
 @Table(name = "specialist")
 public class Specialist implements Serializable {
 	@Id
-    @OneToOne
-    @JoinColumn(name = "person_id", referencedColumnName = "person_id")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "person_id",referencedColumnName = "person_id")
 	@Expose
     private PersonData personData;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -25,7 +25,7 @@ public class Specialist implements Serializable {
     )
     @Expose
     private List<Schedule> Schedules;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "account_id") // Связь с User
     private User user;
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -101,6 +101,14 @@ public class Specialist implements Serializable {
 
 	public void setSchedules(List<Schedule> schedules) {
 		Schedules = schedules;
+	}
+
+	public PersonData getPersonData() {
+		return personData;
+	}
+
+	public void setPersonData(PersonData personData) {
+		this.personData = personData;
 	}
 	
 }

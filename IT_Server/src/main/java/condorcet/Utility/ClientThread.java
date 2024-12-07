@@ -27,7 +27,6 @@ public class ClientThread implements Runnable {
 
 
     private UserService userService = new UserService();
-   
     private PersonDataService personDataService = new PersonDataService();
 
     public ClientThread(Socket clientSocket) throws IOException {
@@ -81,8 +80,13 @@ public class ClientThread implements Runnable {
                     }
                     
                     case WORKER_UPDATE: {
+                    	User requestUser = gson.fromJson(request.getRequestMessage(), User.class);
+                    	requestUser.getSpecialist().setUser(requestUser);
+                    	personDataService.updateEntity(requestUser.getSpecialist().getPersonData());
+                    	userService.updateEntity(requestUser);
                     	System.err.println("Типа обнова");
                     	///TO_DO: Придумай как обновить профиль таким образом, чтобы не поломать связи с другими таблицами
+                    	///Ответ: Id не меняется, а значит - связь не теряется!
                     }
                 }
                 out.println(gson.toJson(response));
