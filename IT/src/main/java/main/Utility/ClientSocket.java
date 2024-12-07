@@ -13,6 +13,7 @@ public class ClientSocket {
     private static Socket socket;
     private BufferedReader in;
     private PrintWriter out;
+    
     private ClientSocket() {
         try {
             socket = new Socket("localhost", 5555);

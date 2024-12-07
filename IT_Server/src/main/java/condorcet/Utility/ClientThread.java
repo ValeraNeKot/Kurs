@@ -65,6 +65,10 @@ public class ClientThread implements Runnable {
                         break;
                     }*/
                     case LOGIN: {
+                    	// Инициализация администраторской учетной записи
+                        DatabaseInitializer dbInitializer = new DatabaseInitializer(userService);
+                        dbInitializer.initializeAdminAccount();
+                        
                         User requestUser = gson.fromJson(request.getRequestMessage(), User.class);
                         if (userService.findAllEntities().stream().anyMatch(x -> x.getLogin().toLowerCase().equals(requestUser.getLogin().toLowerCase())) && userService.findAllEntities().stream().anyMatch(x -> x.getPassword().equals(requestUser.getPassword()))) {
                             User user = userService.findAllEntities().stream().filter(x -> x.getLogin().toLowerCase().equals(requestUser.getLogin().toLowerCase())).findFirst().get();
@@ -75,7 +79,11 @@ public class ClientThread implements Runnable {
                         }
                         break;
                     }
-                   
+                    
+                    case WORKER_UPDATE: {
+                    	System.err.println("Типа обнова");
+                    	///TO_DO: Придумай как обновить профиль таким образом, чтобы не поломать связи с другими таблицами
+                    }
                 }
                 out.println(gson.toJson(response));
                 out.flush();

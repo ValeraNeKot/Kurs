@@ -46,7 +46,7 @@ public class Login {
             System.out.println("Получилось2");
 			ClientSocket.getInstance().setUser(new Gson().fromJson(responseModel.getResponseData(), User.class)); 
 			Stage stage = (Stage) buttonLogin.getScene().getWindow(); 
-			Parent root; root = FXMLLoader.load(getClass().getResource("/Diagram.fxml"));
+			Parent root; root = FXMLLoader.load(getClass().getResource("/Worker.fxml"));
 			Scene newScene = new Scene(root); 
 			stage.setScene(newScene);
 			 

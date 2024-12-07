@@ -27,7 +27,6 @@ public class Specialist implements Serializable {
     private List<Schedule> Schedules;
     @OneToOne
     @JoinColumn(name = "account_id") // Связь с User
-    @Expose
     private User user;
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "department_id")
@@ -37,31 +36,21 @@ public class Specialist implements Serializable {
 	@JoinColumn(name = "post_id")
 	@Expose
 	private Post position;
-	@Column(name = "hire_date", nullable = false)
-    @Temporal(TemporalType.DATE)
-	@Expose
-    private Date hireDate;
 	
 	public Specialist() {};
 
-	public Specialist(PersonData id, List<Schedule> schedules, User user, Department department, Post position,
-			Date hireDate) {
+	public Specialist(PersonData id, List<Schedule> schedules, User user, Department department, Post position) {
 		super();
 		personData = id;
 		Schedules = schedules;
 		this.user = user;
 		this.department = department;
 		this.position = position;
-		this.hireDate = hireDate;
 	}
-
-
-
-
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(Schedules, department, hireDate, personData, position, user);
+		return Objects.hash(Schedules, department, personData, position, user);
 	}
 
 	@Override
@@ -74,7 +63,7 @@ public class Specialist implements Serializable {
 			return false;
 		Specialist other = (Specialist) obj;
 		return Objects.equals(Schedules, other.Schedules) && Objects.equals(department, other.department)
-				&& Objects.equals(hireDate, other.hireDate) && Objects.equals(personData, other.personData)
+			 && Objects.equals(personData, other.personData)
 				&& Objects.equals(position, other.position) && Objects.equals(user, other.user);
 	}
 
@@ -102,16 +91,6 @@ public class Specialist implements Serializable {
 	public void setPosition(Post position) {
 		this.position = position;
 	}
-
-
-	public Date getHireDate() {
-		return hireDate;
-	}
-
-	public void setHireDate(Date hireDate) {
-		this.hireDate = hireDate;
-	}
-
 
 
 	public List<Schedule> getSchedules() {
