@@ -2,38 +2,41 @@ package condorcet.Services;
 
 import java.util.List;
 
+import condorcet.DataAccessObjects.ScheduleDAO;
+import condorcet.Interfaces.DAO;
 import condorcet.Interfaces.Service;
+import condorcet.Models.Entities.Schedule;
 
-public class ScheduleService implements Service{
+public class ScheduleService implements Service<Schedule>{
 
-	@Override
-	public Object findEntity(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	 DAO daoService = new ScheduleDAO();
 
-	@Override
-	public void saveEntity(Object entity) {
-		// TODO Auto-generated method stub
-		
-	}
+	    @Override
+	    public Schedule findEntity(int id) {
+	    	Schedule entity = (Schedule) daoService.findById(id);   
+	        return entity;
+	    }
 
-	@Override
-	public void deleteEntity(Object entity) {
-		// TODO Auto-generated method stub
-		
-	}
+	    @Override
+	    public void saveEntity(Schedule entity) {
+	        daoService.save(entity);
+	    }
 
-	@Override
-	public void updateEntity(Object entity) {
-		// TODO Auto-generated method stub
-		
-	}
+	    @Override
+	    public void deleteEntity(Schedule entity) {
+	        daoService.delete(entity);
+	    }
 
-	@Override
-	public List findAllEntities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	    @Override
+	    public void updateEntity(Schedule entity) {
+	        daoService.update(entity);
+	    }
+
+	    @Override
+	    public List<Schedule> findAllEntities() {
+
+	        return daoService.findAll();
+	    }
+
 
 }

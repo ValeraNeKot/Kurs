@@ -2,38 +2,41 @@ package condorcet.Services;
 
 import java.util.List;
 
+import condorcet.DataAccessObjects.CandidateDAO;
+import condorcet.Interfaces.DAO;
 import condorcet.Interfaces.Service;
+import condorcet.Models.Entities.Candidate;
 
-public class CandidateService implements Service{
+public class CandidateService implements Service<Candidate>{
 
-	@Override
-	public Object findEntity(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public void saveEntity(Object entity) {
-		// TODO Auto-generated method stub
-		
-	}
+    DAO daoService = new CandidateDAO();
 
-	@Override
-	public void deleteEntity(Object entity) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public Candidate findEntity(int id) {
+    	Candidate entity = (Candidate) daoService.findById(id);   
+        return entity;
+    }
 
-	@Override
-	public void updateEntity(Object entity) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void saveEntity(Candidate entity) {
+        daoService.save(entity);
+    }
 
-	@Override
-	public List findAllEntities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public void deleteEntity(Candidate entity) {
+        daoService.delete(entity);
+    }
+
+    @Override
+    public void updateEntity(Candidate entity) {
+        daoService.update(entity);
+    }
+
+    @Override
+    public List<Candidate> findAllEntities() {
+
+        return daoService.findAll();
+    }
 
 }

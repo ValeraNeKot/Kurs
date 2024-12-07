@@ -2,38 +2,42 @@ package condorcet.Services;
 
 import java.util.List;
 
+import condorcet.DataAccessObjects.UserDAO;
+import condorcet.Interfaces.DAO;
 import condorcet.Interfaces.Service;
+import condorcet.Models.Entities.Specialist;
+import condorcet.Models.Entities.User;
+import condorcet.DataAccessObjects.SpecialistDAO;
 
-public class SpecialistService implements Service{
+public class SpecialistService implements Service<Specialist>{
 
-	@Override
-	public Object findEntity(int id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    DAO daoService = new SpecialistDAO();
 
-	@Override
-	public void saveEntity(Object entity) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public Specialist findEntity(int id) {
+    	Specialist entity = (Specialist) daoService.findById(id);   
+        return entity;
+    }
 
-	@Override
-	public void deleteEntity(Object entity) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void saveEntity(Specialist entity) {
+        daoService.save(entity);
+    }
 
-	@Override
-	public void updateEntity(Object entity) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void deleteEntity(Specialist entity) {
+        daoService.delete(entity);
+    }
 
-	@Override
-	public List findAllEntities() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public void updateEntity(Specialist entity) {
+        daoService.update(entity);
+    }
+
+    @Override
+    public List<Specialist> findAllEntities() {
+
+        return daoService.findAll();
+    }
 
 }

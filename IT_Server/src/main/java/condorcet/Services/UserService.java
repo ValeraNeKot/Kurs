@@ -17,29 +17,7 @@ public class UserService implements Service<User> {
 
     @Override
     public User findEntity(int id) {
-        User entity = (User) daoService.findById(id);
-        /*if (entity != null) {
-           for (Specialist specialist : entity.getSpecialist()) {
-                passenger.setPersonData(null);
-                passenger.getFlight().setUserMarks(null);
-                passenger.getFlight().setAircraft(null);
-                passenger.getFlight().setRoute(null);
-            }
-            entity.getPersonData().setUsers(null);
-        }
-        for (UserMark userMark : entity.getUserMarks()) {
-            userMark.getFlight().setUserMarks(null);
-            userMark.getFlight().setRoute(null);
-            userMark.getFlight().setAircraft(null);
-            User tempUser = new User();
-            tempUser.setId(userMark.getUser().getId());
-            tempUser.setPassword(userMark.getUser().getPassword());
-            tempUser.setName(userMark.getUser().getName());
-            tempUser.setLogin(userMark.getUser().getLogin());
-            tempUser.setRole(userMark.getUser().getRole());
-            userMark.setUser(tempUser);
-        }
-        }*/
+        User entity = (User) daoService.findById(id);   
         return entity;
     }
 

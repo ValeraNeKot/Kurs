@@ -6,7 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import condorcet.Interfaces.DAO;
-import condorcet.Models.Entities.User;
+import condorcet.Models.Entities.Department;
 import condorcet.Utility.HibernateSessionFactory;
 
 public class DepartmentDAO implements DAO{
@@ -40,7 +40,7 @@ public class DepartmentDAO implements DAO{
 	    @Override
 	    public Object findById(int id) {
 	        Session session = HibernateSessionFactory.getSessionFactory().openSession();
-	        User user = session.get(User.class, id);
+	        Department user = session.get(Department.class, id);
 	        session.close();
 	        return user;
 	    }
@@ -48,7 +48,7 @@ public class DepartmentDAO implements DAO{
 	    @Override
 	    public List findAll() {
 	        Session session =   HibernateSessionFactory.getSessionFactory().openSession();
-	        List<Object> users = (List<Object>)session.createQuery("From User").list();
+	        List<Object> users = (List<Object>)session.createQuery("From Department").list();
 	        session.close();
 	        return users;
 	    }
