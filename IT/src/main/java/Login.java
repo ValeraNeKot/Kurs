@@ -40,16 +40,24 @@ public class Login {
         
         String answer = ClientSocket.getInstance().getInStream().readLine();
         Response responseModel = new Gson().fromJson(answer, Response.class);
-        System.out.println("Получилось1");
         if (responseModel.getResponseStatus() == ResponseStatus.OK) {
             labelMessage.setVisible(false);
-            System.out.println("Получилось2");
 			ClientSocket.getInstance().setUser(new Gson().fromJson(responseModel.getResponseData(), User.class)); 
 			Stage stage = (Stage) buttonLogin.getScene().getWindow(); 
-			Parent root; root = FXMLLoader.load(getClass().getResource("/Worker.fxml"));
-			Scene newScene = new Scene(root); 
-			stage.setScene(newScene);
-			 
+			Parent root; 
+			switch (ClientSocket.getInstance().getUser().getRole()) {
+			case User:{	
+				root = FXMLLoader.load(getClass().getResource("/Worker.fxml"));
+				Scene newScene = new Scene(root); 
+				stage.setScene(newScene);
+			}
+			case Admin:
+			case Editor:{
+				root = FXMLLoader.load(getClass().getResource("/Manager.fxml"));
+				Scene newScene = new Scene(root); 
+				stage.setScene(newScene);
+			}
+			}	 
         } else {
             labelMessage.setVisible(true);
             System.out.println("НЕ получилось");

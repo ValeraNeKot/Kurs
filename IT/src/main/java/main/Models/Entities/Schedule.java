@@ -12,27 +12,20 @@ import com.google.gson.annotations.Expose;
 public class Schedule implements Serializable {
 	@Expose
     private int IdSchedule;
-    @ManyToMany(mappedBy = "Schedules", fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
     private List<Specialist> Specialists;
-	@Column(name = "date", nullable = false)
-    @Temporal(TemporalType.DATE)
 	@Expose
-    private Date date;
-	@Column(name = "begin_time", nullable = false)
-    //@Temporal(TemporalType.TIME)
+    private String days;
 	@Expose
     private Time BeginTime;
-	@Column(name = "end_time", nullable = false)
-    //@Temporal(TemporalType.TIME)
 	@Expose
     private Time EndTime;
 	
 	public Schedule() {};
 
-	public Schedule(int idSchedule, List<Specialist> specialists, Date date, Time beginTime, Time endTime) {
+	public Schedule(int idSchedule, List<Specialist> specialists, String days, Time beginTime, Time endTime) {
 		IdSchedule = idSchedule;
 		Specialists = specialists;
-		this.date = date;
+		this.days = days;
 		BeginTime = beginTime;
 		EndTime = endTime;
 	}
@@ -52,12 +45,15 @@ public class Schedule implements Serializable {
 		IdSchedule = idSchedule;
 	}
 
-	public Date getDate() {
-		return date;
+
+	public String getDays() {
+		return days;
 	}
-	public void setDate(Date date) {
-		this.date = date;
+
+	public void setDays(String days) {
+		this.days = days;
 	}
+
 	public Time getBeginTime() {
 		return BeginTime;
 	}

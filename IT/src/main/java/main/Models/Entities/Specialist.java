@@ -9,31 +9,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Table(name = "specialist")
 public class Specialist implements Serializable {
-	@Id
-    @OneToOne
-    @JoinColumn(name = "person_id", referencedColumnName = "person_id")
 	@Expose
     private PersonData personData;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-        name = "specialist_schedule",  // Таблица соединения
-        joinColumns = @JoinColumn(name = "person_id"),  // Внешний ключ для специалиста
-        inverseJoinColumns = @JoinColumn(name = "schedule_id")  // Внешний ключ для расписания
-    )
     @Expose
     private List<Schedule> Schedules;
-    @OneToOne
-    @JoinColumn(name = "account_id") // Связь с User
     private User user;
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "department_id")
 	@Expose
 	private Department department;
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name = "post_id")
 	@Expose
 	private Post position;
 
