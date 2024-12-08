@@ -16,6 +16,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ClientThread implements Runnable {
     private Socket clientSocket;
@@ -28,7 +29,9 @@ public class ClientThread implements Runnable {
 
     private UserService userService = new UserService();
     private PersonDataService personDataService = new PersonDataService();
-
+    private SpecialistService specialistService = new SpecialistService();
+    private ScheduleService scheduleService = new ScheduleService();
+    
     public ClientThread(Socket clientSocket) throws IOException {
         response = new Response();
         request = new Request();
@@ -84,9 +87,23 @@ public class ClientThread implements Runnable {
                     	requestUser.getSpecialist().setUser(requestUser);
                     	personDataService.updateEntity(requestUser.getSpecialist().getPersonData());
                     	userService.updateEntity(requestUser);
-                    	System.err.println("Типа обнова");
                     	///TO_DO: Придумай как обновить профиль таким образом, чтобы не поломать связи с другими таблицами
                     	///Ответ: Id не меняется, а значит - связь не теряется!
+                    }
+                    case MANAG:{
+		                    Department requestDepartment = gson.fromJson(request.getRequestMessage(), Department.class);
+		                    List<Specialist> allSpecialists = specialistService.findAllEntities();
+		                    List<Specialist> spec = allSpecialists.stream().filter(s -> s.getDepartment().getIdDepartment() == requestDepartment.getIdDepartment()).collect(Collectors.toList());
+		                    response = new Response(ResponseStatus.OK, "Готово!", gson.toJson(spec));
+                    }
+                    case SCHEDULE_UPDATE:{
+		                    Schedule requestSchedule = gson.fromJson(request.getRequestMessage(), Schedule.class);
+		                    scheduleService.updateEntity(requestSchedule);
+                    }
+                    case SCHEDULE_ADD:{
+                    	 Schedule requestSchedule = gson.fromJson(request.getRequestMessage(), Schedule.class);
+                         scheduleService.saveEntity(requestSchedule);
+                         }
                     }
                 }
                 out.println(gson.toJson(response));

@@ -29,7 +29,14 @@ public class Schedule implements Serializable {
 		BeginTime = beginTime;
 		EndTime = endTime;
 	}
-
+	
+	public Schedule(List<Specialist> specialists, String days, Time beginTime, Time endTime) {
+		Specialists = specialists;
+		this.days = days;
+		BeginTime = beginTime;
+		EndTime = endTime;
+	}
+	
 	public List<Specialist> getSpecialists() {
 		return Specialists;
 	}

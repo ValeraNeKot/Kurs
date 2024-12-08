@@ -102,12 +102,6 @@ public class Worker {
         }
     }
 
-    /**
-     * Форматирует график для отображения в списке.
-     *
-     * @param schedule График
-     * @return Отформатированная строка
-     */
     private String formatSchedule(Schedule schedule) {
         Time beginTime = schedule.getBeginTime();
         Time endTime = schedule.getEndTime();
@@ -126,9 +120,7 @@ public class Worker {
 		Scene newScene = new Scene(root); 
 		stage.setScene(newScene);
     }
-    /**
-     * Загружает данные текущего пользователя в поля.
-     */
+
     private void loadProfileData() {
         loginField.setText(ClientSocket.getInstance().getUser().getLogin());
         roleField.setText(String.valueOf(ClientSocket.getInstance().getUser().getRole()));
@@ -141,9 +133,6 @@ public class Worker {
         departmentField.setText(ClientSocket.getInstance().getUser().getSpecialist().getDepartment().getNameDepartment());
     }
 
-    /**
-     * Включает редактирование текстовых полей (кроме роли).
-     */
     @FXML
     private void enableEditing() {
         nameField.setEditable(true);
@@ -158,9 +147,6 @@ public class Worker {
 
     }
 
-    /**
-     * Сохраняет изменения профиля.
-     */
     @FXML
     private void saveProfile() {
         try {
@@ -194,9 +180,6 @@ public class Worker {
         }
     }
 
-    /**
-     * Управляет видимостью пароля.
-     */
     @FXML
     private void togglePasswordVisibility() {
         if (passwordField.isVisible()) {

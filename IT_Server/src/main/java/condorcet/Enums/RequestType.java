@@ -4,7 +4,11 @@ public enum RequestType {
     REGISTER,
     LOGIN,
     WORKER_UPDATE,
-    
+	MANAG,
+	SCHEDULE_UPDATE,
+	SCHEDULE_DELETE,
+	SCHEDULE_ADD,
+	
     ADD_FLIGHT,
     DELETE_FLIGHT,
     GET_FLIGHT,
@@ -12,5 +16,5 @@ public enum RequestType {
     UPDATE_FLIGHT,
     UPDATE_MARK,
     UPDATE_PASSENGER,
-    CONDORCET
+    CONDORCET,
 }

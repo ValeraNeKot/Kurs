@@ -1,5 +1,7 @@
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -8,30 +10,40 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import main.Enums.RequestType;
 import main.Enums.ResponseStatus;
 import main.Enums.Roles;
 import main.Models.Entities.Schedule;
+import main.Models.Entities.Specialist;
 import main.Models.Entities.User;
 import main.Models.TCP.Request;
 import main.Models.TCP.Response;
 import main.Utility.ClientSocket;
+import main.Utility.ScheduleEntry;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Manager {
-	 @FXML
+	    @FXML
 	    private AnchorPane profilePane;
 	    @FXML
 	    private AnchorPane schedulePane;
+	    @FXML
+	    private AnchorPane schedulePaneManager;
 	    @FXML
 	    private ListView<String> scheduleListView;
 	    @FXML
@@ -64,15 +76,52 @@ public class Manager {
 	    private Button Exit;
 
 	    @FXML
+	    private TableView<ScheduleEntry> scheduleTable;
+	    @FXML
+	    private TableColumn<ScheduleEntry, String> scheduleIdColumn;
+	    @FXML
+	    private TableColumn<ScheduleEntry, String> employeeIdColumn;
+	    @FXML
+	    private TableColumn<ScheduleEntry, String> daysColumn;
+	    @FXML
+	    private TableColumn<ScheduleEntry, String> startTimeColumn;
+	    @FXML
+	    private TableColumn<ScheduleEntry, String> endTimeColumn;
+	    
+	    @FXML
+	    private ComboBox<String> employeeComboBox;
+	    @FXML
+	    private TextField daysField;
+	    @FXML
+	    private TextField startTimeField;
+	    @FXML
+	    private TextField endTimeField;
+	    @FXML
+	    private Button addButton;
+	    @FXML
+	    private Button editButtonManager;
+	    @FXML
+	    private Button clearButton;
+	    @FXML
+	    private Button deleteButton;
+	    
+	    private ObservableList<String> specialists;
+	    private ObservableList<ScheduleEntry> scheduleEntries;
+	    private List<Specialist> s;
+	    
+	    
+	    @FXML
 	    private void initialize() {
 	        profilePane.setVisible(false); // Панель профиля скрыта при запуске
 	        schedulePane.setVisible(false);
+	        schedulePaneManager.setVisible(false);
 	    }
 
 	    @FXML
 	    private void profil_vis() {
 	        profilePane.setVisible(true);  // Включаем видимость панели профиля
 	        schedulePane.setVisible(false); // Отключаем видимость панели расписания
+	        schedulePaneManager.setVisible(false);
 	        loadProfileData();
 	    }
 
@@ -80,11 +129,121 @@ public class Manager {
 	    private void schedule_vis() {
 	        schedulePane.setVisible(true); // Включаем видимость панели расписания
 	        profilePane.setVisible(false); // Отключаем видимость панели профиля
+	        schedulePaneManager.setVisible(false);
 	        loadScheduleData();
 	    }
 	    
+	    
 	    @FXML
-	    private void report_vis() {
+	    private void schedule_manag_vis() throws IOException {
+	        schedulePane.setVisible(false); // Включаем видимость панели расписания
+	        profilePane.setVisible(false); // Отключаем видимость панели профиля
+	        schedulePaneManager.setVisible(true);
+	        loadScheduleDataManage();
+	    }
+	    
+	    private void loadScheduleDataManage() throws IOException {
+	    	Request requestModel = new Request();
+            requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser().getSpecialist().getDepartment()));
+            requestModel.setRequestType(RequestType.MANAG);
+            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+            ClientSocket.getInstance().getOut().flush();
+            String answer = ClientSocket.getInstance().getInStream().readLine();
+            Response responseModel = new Gson().fromJson(answer, Response.class);
+            Type listType = new TypeToken<List<Specialist>>() {}.getType();
+            s = new Gson().fromJson(responseModel.getResponseData(), listType);     
+            
+            for (Specialist t : s) {
+                for(Schedule y: t.getSchedules())
+                	scheduleEntries.add(new ScheduleEntry(Integer.toString(y.getIdSchedule()),Integer.toString( t.getPersonData().getId()), y.getDays(), y.getBeginTime().toString(),y.getEndTime().toString()));
+           specialists.add(Integer.toString(t.getPersonData().getId()));
+            }
+                scheduleIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getScheduleId()));
+            employeeIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployeeId()));
+            daysColumn.setCellValueFactory(cellData -> cellData.getValue().daysProperty());
+            startTimeColumn.setCellValueFactory(cellData -> cellData.getValue().startTimeProperty());
+            endTimeColumn.setCellValueFactory(cellData -> cellData.getValue().endTimeProperty());
+            scheduleTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> fillFieldsWithSchedule(newValue));
+            employeeComboBox.setItems(FXCollections.observableArrayList(specialists));
+        }
+	    
+		private Object fillFieldsWithSchedule(ScheduleEntry schedule) {
+	        if (schedule != null) {
+	            employeeComboBox.setValue(schedule.getEmployeeId());
+	            daysField.setText(schedule.getDays());
+	            startTimeField.setText(schedule.getStartTime());
+	            endTimeField.setText(schedule.getEndTime());
+	            return schedule;
+	        }
+			return schedule;
+	        
+		}
+
+	    
+	    @FXML
+	    private void addSchedule() {
+	        // Добавление нового графика
+	    	String employeeId = employeeComboBox.getValue();
+	        String days = daysField.getText();
+	        String startTime = startTimeField.getText();
+	        String endTime = endTimeField.getText();
+	        List<Specialist> b = new ArrayList<Specialist>();
+	        b.add(s.get(Integer.parseInt(employeeId)));
+	        Schedule newSchedule = new Schedule(b, days, Time.valueOf(startTime), Time.valueOf(endTime));
+	        
+	        Request requestModel = new Request();
+            requestModel.setRequestMessage(new Gson().toJson(newSchedule));
+            requestModel.setRequestType(RequestType.SCHEDULE_ADD);
+            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+            ClientSocket.getInstance().getOut().flush();
+	        clearFields();
+	        
+	    }
+
+	    @FXML
+	    private void editSchedule() {
+	        // Редактирование выбранного графика
+	        ScheduleEntry selectedSchedule = scheduleTable.getSelectionModel().getSelectedItem();
+	        if (selectedSchedule != null) {
+	            selectedSchedule.setEmployeeId(employeeComboBox.getValue());
+	            selectedSchedule.setDays(daysField.getText());
+	            selectedSchedule.setStartTime(startTimeField.getText());
+	            selectedSchedule.setEndTime(endTimeField.getText());
+	            scheduleTable.refresh(); // Обновление таблицы
+	            clearFields();
+	            
+	            Request requestModel = new Request();
+	            requestModel.setRequestMessage(new Gson().toJson(selectedSchedule));
+	            requestModel.setRequestType(RequestType.SCHEDULE_UPDATE);
+	            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+	            ClientSocket.getInstance().getOut().flush();
+		        clearFields();
+	        }
+	    }
+
+	    @FXML
+	    private void deleteSchedule() {
+	        // Удаление выбранного графика
+	    	ScheduleEntry selectedSchedule = scheduleTable.getSelectionModel().getSelectedItem();
+	        if (selectedSchedule != null) {
+	        	 Request requestModel = new Request();
+		            requestModel.setRequestMessage(new Gson().toJson(selectedSchedule));
+		            requestModel.setRequestType(RequestType.SCHEDULE_DELETE);
+		            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+		            ClientSocket.getInstance().getOut().flush();
+			        scheduleEntries.remove(selectedSchedule);
+			        scheduleTable.refresh();
+			        clearFields();
+	        }
+	    }
+
+	    @FXML
+	    private void clearFields() {
+	        // Очистка полей ввода
+	        employeeComboBox.setValue(null);
+	        daysField.clear();
+	        startTimeField.clear();
+	        endTimeField.clear();
 	    }
 	    
 	    private void loadScheduleData() {
