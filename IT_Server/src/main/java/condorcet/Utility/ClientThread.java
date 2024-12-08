@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 
 import condorcet.Enums.ResponseStatus;
 import condorcet.Models.Entities.*;
-//import condorcet.Models.ResultMark;
 import condorcet.Models.TCP.Request;
 import condorcet.Models.TCP.Response;
 import condorcet.Services.*;
@@ -40,7 +39,7 @@ public class ClientThread implements Runnable {
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         out = new PrintWriter(clientSocket.getOutputStream());
     }
-
+    
     @Override
     public void run() {
         try {
@@ -49,23 +48,6 @@ public class ClientThread implements Runnable {
 
                 request = gson.fromJson(message, Request.class);
                 switch (request.getRequestType()) {
-                    /*case REGISTER: {
-
-                        User user = gson.fromJson(request.getRequestMessage(), User.class);
-
-                        if (userService.findAllEntities().stream().noneMatch(x -> x.getLogin().toLowerCase().equals(user.getLogin().toLowerCase()))) {
-                            personDataService.saveEntity(user.getPersonData());
-                            userService.saveEntity(user);
-                            userService.findAllEntities();
-                            User returnUser;
-                            returnUser = userService.findEntity(user.getId());
-                             //returnUser.setUserMarks(null);
-                            response = new Response(ResponseStatus.OK, "Готово!", gson.toJson(returnUser));
-                        } else {
-                            response = new Response(ResponseStatus.ERROR, "Такой пользователь уже существует!", "");
-                        }
-                        break;
-                    }*/
                     case LOGIN: {
                     	// Инициализация администраторской учетной записи
                         DatabaseInitializer dbInitializer = new DatabaseInitializer(userService);
@@ -80,8 +62,7 @@ public class ClientThread implements Runnable {
                             response = new Response(ResponseStatus.ERROR, "Такого пользователя не существует или неправильный пароль!", "");
                         }
                         break;
-                    }
-                    
+                    }                   
                     case WORKER_UPDATE: {
                     	User requestUser = gson.fromJson(request.getRequestMessage(), User.class);
                     	requestUser.getSpecialist().setUser(requestUser);
@@ -104,13 +85,15 @@ public class ClientThread implements Runnable {
                     	 Schedule requestSchedule = gson.fromJson(request.getRequestMessage(), Schedule.class);
                          scheduleService.saveEntity(requestSchedule);
                          }
-                    }
+                    case SCHEDULE_DELETE:{
+                    	Schedule requestSchedule = gson.fromJson(request.getRequestMessage(), Schedule.class);
+                        scheduleService.deleteEntity(requestSchedule);
+                        }
                 }
                 out.println(gson.toJson(response));
-                out.flush();
-                
-            }
-        } catch (Exception e) {
+                out.flush();        
+                }}
+       			catch (Exception e) {
             e.printStackTrace();
         } finally {
             System.out.println("Клиент " + clientSocket.getInetAddress() + ":" + clientSocket.getPort() + " закрыл соединение.");
@@ -124,5 +107,6 @@ public class ClientThread implements Runnable {
             }
         }
     }
+}
    
-    }
+    

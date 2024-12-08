@@ -71,9 +71,8 @@
                         <ListView fx:id="scheduleListView" layoutX="50.0" layoutY="50.0" prefHeight="400.0" prefWidth="470.0" />
                      </children>
                   </AnchorPane>
-				         <AnchorPane fx:id="scheduleManagerPane" prefHeight="400.0" prefWidth="600.0" visible="false" BorderPane.alignment="CENTER">
-    <children>
-        <!-- Верхняя часть - таблица -->
+				         <AnchorPane fx:id="schedulePaneManager" prefHeight="400.0" prefWidth="600.0" visible="false" BorderPane.alignment="CENTER">
+				         <children>
         <TableView fx:id="scheduleTable" layoutX="6.0" prefHeight="250.0" prefWidth="564.0">
             <columns>
                 <TableColumn fx:id="scheduleIdColumn" prefWidth="100.0" text="ID Графика" />
@@ -83,8 +82,6 @@
                 <TableColumn fx:id="endTimeColumn" prefWidth="150.0" text="Время окончания" />
             </columns>
         </TableView>
-        
-        <!-- Нижняя часть - окно редактирования -->
         <VBox fx:id="editPane" alignment="CENTER" layoutY="270.0" prefHeight="230.0" prefWidth="586.0" spacing="10.0">
             <children>
                 <HBox spacing="10.0">
