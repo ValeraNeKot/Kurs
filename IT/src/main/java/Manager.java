@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -34,6 +35,7 @@ import main.Utility.ScheduleEntry;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,16 +107,17 @@ public class Manager {
 	    @FXML
 	    private Button deleteButton;
 	    
-	    private ObservableList<String> specialists;
-	    private ObservableList<ScheduleEntry> scheduleEntries;
+	    private ObservableList<String> specialists = FXCollections.observableArrayList();;
+	    private ObservableList<ScheduleEntry> scheduleEntries = FXCollections.observableArrayList();;
 	    private List<Specialist> s;
 	    
 	    
 	    @FXML
-	    private void initialize() {
+	    private void initialize() throws IOException {
 	        profilePane.setVisible(false); // Панель профиля скрыта при запуске
 	        schedulePane.setVisible(false);
 	        schedulePaneManager.setVisible(false);
+	        loadScheduleDataManage();
 	    }
 
 	    @FXML
@@ -139,32 +142,34 @@ public class Manager {
 	        schedulePane.setVisible(false); // Включаем видимость панели расписания
 	        profilePane.setVisible(false); // Отключаем видимость панели профиля
 	        schedulePaneManager.setVisible(true);
-	        loadScheduleDataManage();
+
 	    }
 	    
 	    private void loadScheduleDataManage() throws IOException {
 	    	Request requestModel = new Request();
             requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser().getSpecialist().getDepartment()));
-            requestModel.setRequestType(RequestType.MANAG);
+            requestModel.setRequestType(RequestType.MANAGER);
             ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
             ClientSocket.getInstance().getOut().flush();
+            
             String answer = ClientSocket.getInstance().getInStream().readLine();
             Response responseModel = new Gson().fromJson(answer, Response.class);
             Type listType = new TypeToken<List<Specialist>>() {}.getType();
-            s = new Gson().fromJson(responseModel.getResponseData(), listType);     
+            s = new Gson().fromJson(responseModel.getResponseData(), listType);     	
             
             for (Specialist t : s) {
-                for(Schedule y: t.getSchedules())
-                	scheduleEntries.add(new ScheduleEntry(Integer.toString(y.getIdSchedule()),Integer.toString( t.getPersonData().getId()), y.getDays(), y.getBeginTime().toString(),y.getEndTime().toString()));
-           specialists.add(Integer.toString(t.getPersonData().getId()));
+                for(Schedule y: t.getSchedules()) {
+                	scheduleEntries.add(new ScheduleEntry(Integer.toString(y.getIdSchedule()),Integer.toString( t.getPersonData().getId()), y.getDays(), y.getBeginTime().toString(),y.getEndTime().toString()));               	
+                }specialists.add(Integer.toString(t.getPersonData().getId()));
             }
-                scheduleIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getScheduleId()));
-            employeeIdColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmployeeId()));
+            scheduleIdColumn.setCellValueFactory(cellData -> cellData.getValue().scheduleIdProperty());
+            employeeIdColumn.setCellValueFactory(cellData -> cellData.getValue().employeeIdProperty());
             daysColumn.setCellValueFactory(cellData -> cellData.getValue().daysProperty());
             startTimeColumn.setCellValueFactory(cellData -> cellData.getValue().startTimeProperty());
             endTimeColumn.setCellValueFactory(cellData -> cellData.getValue().endTimeProperty());
             scheduleTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> fillFieldsWithSchedule(newValue));
             employeeComboBox.setItems(FXCollections.observableArrayList(specialists));
+            scheduleTable.setItems(scheduleEntries);
         }
 	    
 		private Object fillFieldsWithSchedule(ScheduleEntry schedule) {
@@ -175,29 +180,77 @@ public class Manager {
 	            endTimeField.setText(schedule.getEndTime());
 	            return schedule;
 	        }
-			return schedule;
-	        
+			return schedule;        
 		}
 
 	    
 	    @FXML
 	    private void addSchedule() {
 	        // Добавление нового графика
-	    	String employeeId = employeeComboBox.getValue();
-	        String days = daysField.getText();
-	        String startTime = startTimeField.getText();
-	        String endTime = endTimeField.getText();
-	        List<Specialist> b = new ArrayList<Specialist>();
-	        b.add(s.get(Integer.parseInt(employeeId)));
-	        Schedule newSchedule = new Schedule(b, days, Time.valueOf(startTime), Time.valueOf(endTime));
-	        
-	        Request requestModel = new Request();
-            requestModel.setRequestMessage(new Gson().toJson(newSchedule));
-            requestModel.setRequestType(RequestType.SCHEDULE_ADD);
-            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
-            ClientSocket.getInstance().getOut().flush();
-	        clearFields();
-	        
+	    	 /* try {
+	    	        // Создание нового расписания
+	    	        String employeeId = employeeComboBox.getValue();
+	    	        String days = daysField.getText();
+	    	        String startTime = startTimeField.getText();
+	    	        String endTime = endTimeField.getText();
+	    	        System.out.println(employeeId+days+startTime+endTime);
+	    	        
+	    	            // Дополнение времени до формата HH:MM:SS
+	    	        if (startTime.matches("\\d{1,2}:\\d{2}")) startTime += ":00";
+	    	        if (endTime.matches("\\d{1,2}:\\d{2}")) endTime += ":00";
+
+	    	            // Проверка формата
+	    	        if (!startTime.matches("\\d{2}:\\d{2}:\\d{2}") || !endTime.matches("\\d{2}:\\d{2}:\\d{2}")) {
+	    	        System.out.println("Некорректный формат времени. Используйте формат HH:MM:SS");
+	    	        return;}
+	    	        
+	    	        // Проверьте, есть ли данные
+	    	        if (employeeId == null || days.isEmpty() || startTime.isEmpty() || endTime.isEmpty()) {
+	    	            System.out.println("Заполните все поля.");
+	    	            return;
+	    	        }
+	    	       
+	    	     // Сортируем список по числовому значению scheduleId
+	    	        int maxScheduleId = scheduleEntries.stream()
+	    	            .map(entry -> Integer.parseInt(entry.getScheduleId())) // Преобразуем scheduleId в целое число
+	    	            .max(Integer::compare) // Находим максимальное значение
+	    	            .orElse(0); // Если список пуст, начинаем с 0
+	    	        // Добавление нового элемента в ObservableList
+	    	        ScheduleEntry newEntry = new ScheduleEntry(Integer.toString(maxScheduleId + 1), employeeId, days, startTime, endTime);
+	    	        scheduleEntries.add(newEntry);
+	    	        
+	    	        
+	    	        s.get(Integer.parseInt(employeeId));
+	    	        
+	    	        // Создаем новое расписание с увеличенным на 1 идентификатором
+	    	        Schedule newSchedule = new Schedule(maxScheduleId + 1, , days, startTime, endTime);
+	    	        
+	    	        newSchedule.getSpecialists().forEach(specialist -> {
+	    	        specialist.getSchedules().add(newSchedule);});
+	    	        
+	    	        //s.get(Integer.parseInt(employeeId)).getSchedules().add(newSchedule);
+	    	        Request requestModel = new Request();
+	    	        
+	    	        Gson gson = new Gson();
+	    	        try {
+	    	            String json = gson.toJson(newSchedule);
+	    	            System.out.println(json); // Печать сериализованного объекта для диагностики
+	    	        } catch (JsonSyntaxException e) {
+	    	            e.printStackTrace(); // Обработка ошибки
+	    	            System.out.println("JOPA");
+	    	        }
+	    	        
+	    	        requestModel.setRequestMessage(new Gson().toJson(newSchedule));
+	    	        requestModel.setRequestType(RequestType.SCHEDULE_ADD);
+	    	        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+	    	        ClientSocket.getInstance().getOut().flush();
+
+	    	        // Очистка полей
+	    	        clearFields();
+	    	    } catch (Exception e) {
+	    	        e.printStackTrace();
+	    	    }
+	        */
 	    }
 
 	    @FXML
@@ -209,6 +262,7 @@ public class Manager {
 	            selectedSchedule.setDays(daysField.getText());
 	            selectedSchedule.setStartTime(startTimeField.getText());
 	            selectedSchedule.setEndTime(endTimeField.getText());
+
 	            scheduleTable.refresh(); // Обновление таблицы
 	            clearFields();
 	            
@@ -267,8 +321,8 @@ public class Manager {
 	     * @return Отформатированная строка
 	     */
 	    private String formatSchedule(Schedule schedule) {
-	        Time beginTime = schedule.getBeginTime();
-	        Time endTime = schedule.getEndTime();
+	    	String beginTime = schedule.getBeginTime();
+	    	String endTime = schedule.getEndTime();
 	        String days = schedule.getDays();
 
 	        return String.format("%s: %s - %s", days, beginTime.toString(), endTime.toString());

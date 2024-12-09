@@ -34,7 +34,6 @@ public class ScheduleService implements Service<Schedule>{
 
 	    @Override
 	    public List<Schedule> findAllEntities() {
-
 	        return daoService.findAll();
 	    }
 

@@ -46,6 +46,13 @@ public class Specialist implements Serializable {
 		this.user = user;
 		this.department = department;
 		this.position = position;
+	}	
+	public Specialist( List<Schedule> schedules, User user, Department department, Post position) {
+		super();
+		Schedules = schedules;
+		this.user = user;
+		this.department = department;
+		this.position = position;
 	}
 
 	@Override

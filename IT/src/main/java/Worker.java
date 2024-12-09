@@ -25,6 +25,7 @@ import main.Utility.ClientSocket;
 
 import java.io.IOException;
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.List;
 
 public class Worker {
@@ -103,8 +104,8 @@ public class Worker {
     }
 
     private String formatSchedule(Schedule schedule) {
-        Time beginTime = schedule.getBeginTime();
-        Time endTime = schedule.getEndTime();
+    	String beginTime = schedule.getBeginTime();
+    	String endTime = schedule.getEndTime();
         String days = schedule.getDays();
 
         return String.format("%s: %s - %s", days, beginTime.toString(), endTime.toString());

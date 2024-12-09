@@ -14,6 +14,14 @@ public class ScheduleEntry {
         this.startTime = startTime;
         this.endTime = endTime;
     }
+    
+    public ScheduleEntry( String employeeId, String days, String startTime, String endTime) {
+        this.employeeId = employeeId;
+        this.days = days;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
 
     public String getScheduleId() {
         return scheduleId;
@@ -35,7 +43,7 @@ public class ScheduleEntry {
         return endTime;
     }
 
-    // JavaFX Property для таблицы (если необходимо использовать биндинг)
+    // JavaFX Property для таблицы ScheduleEntry  (если необходимо использовать биндинг)
     public javafx.beans.property.StringProperty scheduleIdProperty() {
         return new javafx.beans.property.SimpleStringProperty(scheduleId);
     }
@@ -75,6 +83,12 @@ public void setStartTime(String startTime) {
 
 public void setEndTime(String endTime) {
 	this.endTime = endTime;
+}
+
+@Override
+public String toString() {
+	return "ScheduleEntry [scheduleId=" + scheduleId + ", employeeId=" + employeeId + ", days=" + days + ", startTime="
+			+ startTime + ", endTime=" + endTime + "]";
 }
 
 

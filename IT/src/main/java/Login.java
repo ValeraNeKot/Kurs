@@ -50,12 +50,19 @@ public class Login {
 				root = FXMLLoader.load(getClass().getResource("/Worker.fxml"));
 				Scene newScene = new Scene(root); 
 				stage.setScene(newScene);
+				break;
 			}
-			case Admin:
+			case Admin:{
+				root = FXMLLoader.load(getClass().getResource("/HR.fxml"));
+				Scene newScene = new Scene(root); 
+				stage.setScene(newScene);
+				break;
+			}
 			case Editor:{
 				root = FXMLLoader.load(getClass().getResource("/Manager.fxml"));
 				Scene newScene = new Scene(root); 
 				stage.setScene(newScene);
+				break;
 			}
 			}	 
         } else {

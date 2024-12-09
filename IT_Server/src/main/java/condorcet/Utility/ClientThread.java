@@ -30,6 +30,8 @@ public class ClientThread implements Runnable {
     private PersonDataService personDataService = new PersonDataService();
     private SpecialistService specialistService = new SpecialistService();
     private ScheduleService scheduleService = new ScheduleService();
+    private VacancyService vacancyService = new VacancyService();
+    private PostService postService = new PostService();
     
     public ClientThread(Socket clientSocket) throws IOException {
         response = new Response();
@@ -68,27 +70,54 @@ public class ClientThread implements Runnable {
                     	requestUser.getSpecialist().setUser(requestUser);
                     	personDataService.updateEntity(requestUser.getSpecialist().getPersonData());
                     	userService.updateEntity(requestUser);
-                    	///TO_DO: Придумай как обновить профиль таким образом, чтобы не поломать связи с другими таблицами
-                    	///Ответ: Id не меняется, а значит - связь не теряется!
+                    	break;
                     }
-                    case MANAG:{
-		                    Department requestDepartment = gson.fromJson(request.getRequestMessage(), Department.class);
-		                    List<Specialist> allSpecialists = specialistService.findAllEntities();
-		                    List<Specialist> spec = allSpecialists.stream().filter(s -> s.getDepartment().getIdDepartment() == requestDepartment.getIdDepartment()).collect(Collectors.toList());
-		                    response = new Response(ResponseStatus.OK, "Готово!", gson.toJson(spec));
-                    }
+                    case MANAGER:{
+                    	Department requestDepartment = gson.fromJson(request.getRequestMessage(), Department.class);
+	                    List<Specialist> allSpecialists = specialistService.findAllEntities();  
+	                   List<Specialist> spec = allSpecialists.stream().filter(s -> s.getDepartment().getIdDepartment() == requestDepartment.getIdDepartment()).collect(Collectors.toList());		                    		                    
+	                   response = new Response(ResponseStatus.OK, "Готово!", gson.toJson(spec));
+                    	break;
+                    } 
                     case SCHEDULE_UPDATE:{
 		                    Schedule requestSchedule = gson.fromJson(request.getRequestMessage(), Schedule.class);
 		                    scheduleService.updateEntity(requestSchedule);
+		                    break;
                     }
                     case SCHEDULE_ADD:{
                     	 Schedule requestSchedule = gson.fromJson(request.getRequestMessage(), Schedule.class);
                          scheduleService.saveEntity(requestSchedule);
+                         break;
                          }
                     case SCHEDULE_DELETE:{
                     	Schedule requestSchedule = gson.fromJson(request.getRequestMessage(), Schedule.class);
                         scheduleService.deleteEntity(requestSchedule);
+                        break;
                         }
+                    case VACANCY:{
+                    	Vacancy requestDepartment = gson.fromJson(request.getRequestMessage(), Vacancy.class);
+	                    List<Vacancy> vacanc = vacancyService.findAllEntities();        		                    
+	                    response = new Response(ResponseStatus.OK, "Готово!", gson.toJson(vacanc));
+                    break;
+                    }
+                    case POST:{
+                    	Post requestDepartment = gson.fromJson(request.getRequestMessage(), Post.class);
+	                    List<Post> vacanc = postService.findAllEntities();        		                    
+	                    response = new Response(ResponseStatus.OK, "Готово!", gson.toJson(vacanc));
+                    break;
+                    }
+                    case VACANCY_ADD:{
+                    	Vacancy requestSchedule = gson.fromJson(request.getRequestMessage(), Vacancy.class);
+                    	vacancyService.saveEntity(requestSchedule);
+                    break;}
+                    case VACANCY_UPDATE:{
+                    	Vacancy requestSchedule = gson.fromJson(request.getRequestMessage(), Vacancy.class);
+                    	vacancyService.updateEntity(requestSchedule);
+                    	break;}
+                    case VACANCY_DELETE:{
+                    	Vacancy requestSchedule = gson.fromJson(request.getRequestMessage(), Vacancy.class);
+                    	vacancyService.deleteEntity(requestSchedule);
+                    	break;}
                 }
                 out.println(gson.toJson(response));
                 out.flush();        
