@@ -36,4 +36,12 @@ public class Department implements Serializable{
 		NameDepartment = nameDepartment;
 	}
 	
+	public javafx.beans.property.IntegerProperty idProperty() {
+        return new javafx.beans.property.SimpleIntegerProperty(IdDepartment);
+    }
+
+    public javafx.beans.property.StringProperty postProperty() {
+        return new javafx.beans.property.SimpleStringProperty(NameDepartment);
+    }
+
 }

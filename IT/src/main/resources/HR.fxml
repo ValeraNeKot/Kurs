@@ -120,8 +120,56 @@
 						 </children>
                    </AnchorPane>
                    <AnchorPane fx:id="departmentPaneManager" prefHeight="400.0" prefWidth="600.0" visible="false" BorderPane.alignment="CENTER">
+                    <children>
+					        <TableView fx:id="departmentTable" layoutX="50.0" layoutY="20.0" prefHeight="150.0" prefWidth="500.0">
+					            <columns>
+					                <TableColumn fx:id="idColumnDepartment" prefWidth="100.0" text="ID" />
+					                <TableColumn fx:id="nameColumnDepartment" prefWidth="200.0" text="Отдел" />
+					            </columns>
+					        </TableView>
+					        <VBox layoutX="50.0" layoutY="200.0" spacing="10.0">
+					            <TextField fx:id="idTextFieldDepartment" prefWidth="200.0" promptText="ID" />      
+					            <TextField fx:id="nameTextFieldDepartment" prefWidth="200.0" promptText="Название" />
+					            <HBox spacing="10.0">
+					                <Button fx:id="addButtonDepartment" onAction="#addDepartment" text="Добавить" />
+					                <Button fx:id="updateButtonDepartment" onAction="#updateDepartment" text="Изменить" />
+					                <Button fx:id="deleteButtonDepartment" onAction="#deleteDepartment" text="Удалить" />
+					            </HBox>
+					            <Button fx:id="clearButtonDepartment" onAction="#clearDepartment" prefWidth="200.0" text="Очистить" />
+					        </VBox>
+						 </children>
                    </AnchorPane>
                    <AnchorPane fx:id="candidatePaneManager" prefHeight="400.0" prefWidth="600.0" visible="false" BorderPane.alignment="CENTER">
+                   <children>
+					        <TableView fx:id="candidateTable" layoutX="50.0" layoutY="20.0" prefHeight="150.0" prefWidth="500.0">
+					            <columns>
+					                <TableColumn fx:id="idColumnCandidate" prefWidth="40.0" text="ID" />
+					                <TableColumn fx:id="nameColumnCandidate" prefWidth="90.0" text="ФИО" />
+					                <TableColumn fx:id="ageColumnCandidate" prefWidth="50.0" text="Возраст" />
+					                <TableColumn fx:id="mailColumnCandidate" prefWidth="70.0" text="Email" />
+					                <TableColumn fx:id="phoneColumnCandidate" prefWidth="74.0" text="Номер тел." />
+					                <TableColumn fx:id="postColumnCandidate" prefWidth="60.0" text="Должность" />
+					                <TableColumn fx:id="skilsColumnCandidate" prefWidth="90.0" text="Навыки" />
+					                <TableColumn fx:id="educationColumnCandidate" prefWidth="90.0" text="Образование" />
+					            </columns>
+					        </TableView>
+					        <VBox layoutX="50.0" layoutY="400.0" spacing="10.0">
+					            <TextField fx:id="idTextFieldCandidate" prefWidth="200.0" promptText="ID" />      
+					            <TextField fx:id="nameTextFieldCandidate" prefWidth="100.0" text="ФИО" />
+					            <TextField fx:id="ageTextFieldCandidate" prefWidth="50.0" text="Возраст" />
+					            <TextField fx:id="mailTextFieldCandidate" prefWidth="90.0" text="Email" />
+					            <TextField fx:id="phoneTextFieldCandidate" prefWidth="90.0" text="Номер тел." />
+					            <ComboBox fx:id="postComboBoxCandidate" prefWidth="80.0" text="Должность" />
+					            <TextField fx:id="skilsTextFieldCandidate" prefWidth="90.0" text="Навыки" />
+					            <TextField fx:id="educationTextFieldCandidate" prefWidth="90.0" text="Образование" />
+					            <HBox spacing="10.0">
+					                <Button fx:id="addButtonCandidate" onAction="#addCandidate" text="Добавить" />
+					                <Button fx:id="updateButtonCandidate" onAction="#updateCandidate" text="Изменить" />
+					                <Button fx:id="deleteButtonCandidate" onAction="#deleteCandidate" text="Удалить" />
+					            </HBox>
+					            <Button fx:id="clearButtonCandidate" onAction="#clearCandidate" prefWidth="200.0" text="Очистить" />
+					        </VBox>
+						 </children>
                    </AnchorPane>
                    <AnchorPane fx:id="specialistPaneManager" prefHeight="400.0" prefWidth="600.0" visible="false" BorderPane.alignment="CENTER">
                    </AnchorPane>
