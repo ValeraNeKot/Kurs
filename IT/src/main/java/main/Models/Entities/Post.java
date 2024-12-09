@@ -45,4 +45,16 @@ public class Post implements Serializable{
 		Responsibility = responsibility;
 	}
 
+	public javafx.beans.property.IntegerProperty idProperty() {
+        return new javafx.beans.property.SimpleIntegerProperty(IdPost);
+    }
+
+    public javafx.beans.property.StringProperty postNameProperty() {
+        return new javafx.beans.property.SimpleStringProperty(NamePost);
+    }
+
+    public javafx.beans.property.StringProperty responsibilityProperty() {
+        return new javafx.beans.property.SimpleStringProperty(Responsibility);
+    }
+    
 }

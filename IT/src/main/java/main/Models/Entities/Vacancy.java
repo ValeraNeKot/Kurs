@@ -14,18 +14,39 @@ import javax.persistence.Table;
 
 import com.google.gson.annotations.Expose;
 
+import javafx.beans.property.IntegerProperty;
+
 public class Vacancy implements Serializable {
     @Expose
-    private Long id;
+    private int id;
     @Expose
     private Post post;
     @Expose
     private int number;
     
+    public javafx.beans.property.IntegerProperty idProperty() {
+        return new javafx.beans.property.SimpleIntegerProperty(id);
+    }
+
+    public javafx.beans.property.StringProperty postProperty() {
+        return new javafx.beans.property.SimpleStringProperty(post.getNamePost());
+    }
+
+    public javafx.beans.property.IntegerProperty numberProperty() {
+        return new javafx.beans.property.SimpleIntegerProperty(number);
+    }
+    
 	public Vacancy() {};
 	
 	public Vacancy(Post post, int number) {
 		super();
+		this.post = post;
+		this.number = number;
+	}
+	
+	public Vacancy(int id, Post post, int number) {
+		super();
+		this.id =id;
 		this.post = post;
 		this.number = number;
 	}
@@ -45,6 +66,12 @@ public class Vacancy implements Serializable {
 		this.number = number;
 	}
 
-	
-	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 }

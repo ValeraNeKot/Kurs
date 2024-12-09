@@ -36,7 +36,6 @@ public class SpecialistService implements Service<Specialist>{
 
     @Override
     public List<Specialist> findAllEntities() {
-
         return daoService.findAll();
     }
 

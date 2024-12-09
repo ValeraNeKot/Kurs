@@ -1,6 +1,7 @@
 package condorcet.Models.Entities;
 
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.List;
 import java.io.Serializable;
 import java.util.Date;
@@ -18,24 +19,28 @@ public class Schedule implements Serializable {
     @Column(name = "schedule_id")
     @Expose
     private int IdSchedule;
-    @ManyToMany(mappedBy = "Schedules", fetch = FetchType.EAGER,  cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "Schedules", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Specialist> Specialists;
-	@Column(name = "days", nullable = false)
+	@Column(name = "days")
 	@Expose
     private String days;
-	@Column(name = "begin_time", nullable = false)
-    //@Temporal(TemporalType.TIME)
+	@Column(name = "begin_time")
 	@Expose
-    private Time BeginTime;
-	@Column(name = "end_time", nullable = false)
-    //@Temporal(TemporalType.TIME)
+    private String BeginTime;
+	@Column(name = "end_time")
 	@Expose
-    private Time EndTime;
+    private String EndTime;
 	
 	public Schedule() {};
 
-	public Schedule(int idSchedule, List<Specialist> specialists, String date, Time beginTime, Time endTime) {
+	public Schedule(int idSchedule, List<Specialist> specialists, String date, String beginTime, String endTime) {
 		IdSchedule = idSchedule;
+		Specialists = specialists;
+		this.days = date;
+		BeginTime = beginTime;
+		EndTime = endTime;
+	}
+	public Schedule( List<Specialist> specialists, String date, String beginTime, String endTime) {
 		Specialists = specialists;
 		this.days = date;
 		BeginTime = beginTime;
@@ -65,16 +70,16 @@ public class Schedule implements Serializable {
 		this.days = days;
 	}
 
-	public Time getBeginTime() {
+	public String getBeginTime() {
 		return BeginTime;
 	}
-	public void setBeginTime(Time beginTime) {
+	public void setBeginTime(String beginTime) {
 		BeginTime = beginTime;
 	}
-	public Time getEndTime() {
+	public String getEndTime() {
 		return EndTime;
 	}
-	public void setEndTime(Time endTime) {
+	public void setEndTime(String endTime) {
 		EndTime = endTime;
 	}
 	

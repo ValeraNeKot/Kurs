@@ -1,6 +1,7 @@
 package main.Models.Entities;
 
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.List;
 import java.io.Serializable;
 import java.util.Date;
@@ -16,20 +17,27 @@ public class Schedule implements Serializable {
 	@Expose
     private String days;
 	@Expose
-    private Time BeginTime;
+    private String BeginTime;
 	@Expose
-    private Time EndTime;
+    private String EndTime;
 	
 	public Schedule() {};
 
-	public Schedule(int idSchedule, List<Specialist> specialists, String days, Time beginTime, Time endTime) {
+	public Schedule(int idSchedule, List<Specialist> specialists, String days,String beginTime, String endTime) {
 		IdSchedule = idSchedule;
 		Specialists = specialists;
 		this.days = days;
 		BeginTime = beginTime;
 		EndTime = endTime;
 	}
-
+	
+	public Schedule(List<Specialist> specialists, String days, String beginTime, String endTime) {
+		Specialists = specialists;
+		this.days = days;
+		BeginTime = beginTime;
+		EndTime = endTime;
+	}
+	
 	public List<Specialist> getSpecialists() {
 		return Specialists;
 	}
@@ -54,16 +62,16 @@ public class Schedule implements Serializable {
 		this.days = days;
 	}
 
-	public Time getBeginTime() {
+	public String getBeginTime() {
 		return BeginTime;
 	}
-	public void setBeginTime(Time beginTime) {
+	public void setBeginTime(String beginTime) {
 		BeginTime = beginTime;
 	}
-	public Time getEndTime() {
+	public String getEndTime() {
 		return EndTime;
 	}
-	public void setEndTime(Time endTime) {
+	public void setEndTime(String endTime) {
 		EndTime = endTime;
 	}
 	

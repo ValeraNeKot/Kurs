@@ -17,12 +17,11 @@ import com.google.gson.annotations.Expose;
 @Entity
 @Table(name = "vacancy")
 public class Vacancy implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "vacancy_id") // Добавьте уникальный идентификатор для Vacancy
+    @Column(name = "vacancy_id") 
     @Expose
-    private Long id;
+    private int id;
 
     @OneToOne
     @JoinColumn(name = "post_id")
@@ -54,6 +53,14 @@ public class Vacancy implements Serializable {
 	}
 	public void setNumber(int number) {
 		this.number = number;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	
