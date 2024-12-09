@@ -13,5 +13,7 @@ public enum RequestType {
 	VACANCY_ADD,
 	VACANCY_UPDATE,
 	VACANCY_DELETE,
-	
+	POST_ADD,
+	POST_UPDATE,
+	POST_DELETE	
 }

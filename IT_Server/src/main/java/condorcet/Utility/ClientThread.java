@@ -118,6 +118,18 @@ public class ClientThread implements Runnable {
                     	Vacancy requestSchedule = gson.fromJson(request.getRequestMessage(), Vacancy.class);
                     	vacancyService.deleteEntity(requestSchedule);
                     	break;}
+                    case POST_ADD:{
+                    	Post requestSchedule = gson.fromJson(request.getRequestMessage(), Post.class);
+                    	postService.saveEntity(requestSchedule);
+                    break;}
+                    case POST_UPDATE:{
+                    	Post requestSchedule = gson.fromJson(request.getRequestMessage(), Post.class);
+                    	postService.updateEntity(requestSchedule);
+                    	break;}
+                    case POST_DELETE:{
+                    	Post requestSchedule = gson.fromJson(request.getRequestMessage(), Post.class);
+                    	postService.deleteEntity(requestSchedule);
+                    	break;}
                 }
                 out.println(gson.toJson(response));
                 out.flush();        

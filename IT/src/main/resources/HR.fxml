@@ -24,22 +24,26 @@
                <left>
                   <AnchorPane prefHeight="501.0" prefWidth="10.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Label layoutX="35.0" layoutY="100.0" text="Меню HR-a">
+                        <Label layoutX="67.0" layoutY="56.0" text="Меню HR-a">
                            <font>
                               <Font name="System" size="18.0" />
                            </font>
                         </Label>
-                        <Button fx:id="Profil" layoutX="45.0" layoutY="182.0" mnemonicParsing="false" onAction="#profil_vis" prefHeight="30.0" prefWidth="140.0" text="Профиль" />
-                        <Button fx:id="Schedule" layoutX="45.0" layoutY="232.0" mnemonicParsing="false" onAction="#schedule_vis" prefHeight="30.0" prefWidth="140.0" text="График работы" />
-                        <Button fx:id="VacanyManage" layoutX="45.0" layoutY="282.0" mnemonicParsing="false" onAction="#vacancy_manag_vis" prefHeight="30.0" prefWidth="140.0" text="Управление вакансиями" />
-                        <Button fx:id="Exit" layoutX="45.0" layoutY="332.0" mnemonicParsing="false" onAction="#back" prefHeight="30.0" prefWidth="140.0" text="Выход" />
-                        <Line endX="100.0" endY="-38.0" layoutX="130.0" layoutY="47.0" startX="100.0" startY="444.4" stroke="#00000076" />
+                        <Button fx:id="Profil" layoutX="45.0" layoutY="120.0" mnemonicParsing="false" onAction="#profil_vis" prefHeight="30.0" prefWidth="140.0" text="Профиль" />
+                        <Button fx:id="Schedule" layoutX="45.0" layoutY="160.0" mnemonicParsing="false" onAction="#schedule_vis" prefHeight="30.0" prefWidth="140.0" text="График работы" />
+                        <Button fx:id="VacanyManage" layoutX="45.0" layoutY="200.0" mnemonicParsing="false" onAction="#vacancy_manag_vis" prefHeight="30.0" prefWidth="140.0" text="Вакансии" />
+                        <Button fx:id="Exit" layoutX="45.0" layoutY="440.0" mnemonicParsing="false" onAction="#back" prefHeight="30.0" prefWidth="140.0" text="Выход" />                   
+                        <Button fx:id="PostManage" layoutX="45.0" layoutY="240.0" mnemonicParsing="false" onAction="#post_manag_vis" prefHeight="30.0" prefWidth="140.0" text="Должности" />
+                        <Button fx:id="DepartmentManage" layoutX="45.0" layoutY="280.0" mnemonicParsing="false" onAction="#department_manag_vis" prefHeight="30.0" prefWidth="140.0" text="Отделы" />
+                        <Button fx:id="CandidateManage" layoutX="45.0" layoutY="320.0" mnemonicParsing="false" onAction="#candidate_manag_vis" prefHeight="30.0" prefWidth="140.0" text="Кандидаты" />
+                        <Button fx:id="SpecialistManage" layoutX="45.0" layoutY="360.0" mnemonicParsing="false" onAction="#vacancy_manag_vis" prefHeight="30.0" prefWidth="140.0" text="Специалисты" />
+                         <Line endX="100.0" endY="-38.0" layoutX="130.0" layoutY="47.0" startX="100.0" startY="444.4" stroke="#00000076" />
                      </children>
                   </AnchorPane>
                </left>
                <center>
                <StackPane prefHeight="501.0" prefWidth="669.0">
-                  <AnchorPane fx:id="profilePane" prefHeight="501.0" prefWidth="564.0" visible="false" BorderPane.alignment="CENTER">
+                   <AnchorPane fx:id="profilePane" prefHeight="501.0" prefWidth="564.0" visible="false" BorderPane.alignment="CENTER">
                      <children>
                         <Label layoutX="100.0" layoutY="20.0" text="Профиль пользователя" />
                         <Label layoutX="70.0" layoutY="70.0" text="Логин:" />
@@ -71,28 +75,56 @@
                         <ListView fx:id="scheduleListView" layoutX="50.0" layoutY="50.0" prefHeight="400.0" prefWidth="470.0" />
                      </children>
                   </AnchorPane>
-				         <AnchorPane fx:id="vacancyPaneManager" prefHeight="400.0" prefWidth="600.0" visible="false" BorderPane.alignment="CENTER">
+				   <AnchorPane fx:id="vacancyPaneManager" prefHeight="400.0" prefWidth="600.0" visible="false" BorderPane.alignment="CENTER">
 				         <children>
-					        <TableView fx:id="vacancyTable" layoutX="50.0" layoutY="20.0" prefWidth="500.0" prefHeight="150.0">
+					        <TableView fx:id="vacancyTable" layoutX="50.0" layoutY="20.0" prefHeight="150.0" prefWidth="500.0">
 					            <columns>
-					                <TableColumn fx:id="idColumn" text="ID" prefWidth="100.0" />
-					                <TableColumn fx:id="positionColumn" text="Должность" prefWidth="200.0" />
-					                <TableColumn fx:id="vacancyCountColumn" text="Число мест" prefWidth="200.0" />
+					                <TableColumn fx:id="idColumn" prefWidth="100.0" text="ID" />
+					                <TableColumn fx:id="positionColumn" prefWidth="200.0" text="Должность" />
+					                <TableColumn fx:id="vacancyCountColumn" prefWidth="200.0" text="Число мест" />
 					            </columns>
 					        </TableView>
 					        <VBox layoutX="50.0" layoutY="200.0" spacing="10.0">
-					            <ComboBox fx:id="positionComboBox" prefWidth="200.0"/>      
-					            <TextField fx:id="idTextField" promptText="ID" prefWidth="200.0"/>
-					            <TextField fx:id="vacancyCountTextField" promptText="Число мест" prefWidth="200.0"/>
+					            <ComboBox fx:id="positionComboBox" prefWidth="200.0" />      
+					            <TextField fx:id="idTextField" prefWidth="200.0" promptText="ID" />
+					            <TextField fx:id="vacancyCountTextField" prefWidth="200.0" promptText="Число мест" />
 					            <HBox spacing="10.0">
-					                <Button fx:id="addButton" text="Добавить" onAction="#addVacancy"/>
-					                <Button fx:id="updateButton" text="Изменить" onAction="#updateVacancy"/>
-					                <Button fx:id="deleteButton" text="Удалить" onAction="#deleteVacancy"/>
+					                <Button fx:id="addButton" onAction="#addVacancy" text="Добавить" />
+					                <Button fx:id="updateButton" onAction="#updateVacancy" text="Изменить" />
+					                <Button fx:id="deleteButton" onAction="#deleteVacancy" text="Удалить" />
 					            </HBox>
-					            <Button fx:id="clearButton" text="Очистить" prefWidth="200.0" onAction="#clear"/>
+					            <Button fx:id="clearButton" onAction="#clear" prefWidth="200.0" text="Очистить" />
 					        </VBox>
 						 </children>
                   </AnchorPane>
+                   <AnchorPane fx:id="postPaneManager" prefHeight="400.0" prefWidth="600.0" visible="false" BorderPane.alignment="CENTER">
+                   <children>
+					        <TableView fx:id="postTable" layoutX="50.0" layoutY="20.0" prefHeight="150.0" prefWidth="500.0">
+					            <columns>
+					                <TableColumn fx:id="idColumnPost" prefWidth="100.0" text="ID" />
+					                <TableColumn fx:id="nameColumn" prefWidth="200.0" text="Должность" />
+					                <TableColumn fx:id="responsibilityColumn" prefWidth="200.0" text="Обязанности" />
+					            </columns>
+					        </TableView>
+					        <VBox layoutX="50.0" layoutY="200.0" spacing="10.0">
+					            <TextField fx:id="idTextFieldPost" prefWidth="200.0" promptText="ID" />      
+					            <TextField fx:id="nameTextFieldPost" prefWidth="200.0" promptText="Название" />
+					            <TextField fx:id="responsibilityTextFieldPost" prefWidth="200.0" promptText="Обязанности" />
+					            <HBox spacing="10.0">
+					                <Button fx:id="addButtonPost" onAction="#addPost" text="Добавить" />
+					                <Button fx:id="updateButtonPost" onAction="#updatePost" text="Изменить" />
+					                <Button fx:id="deleteButtonPost" onAction="#deletePost" text="Удалить" />
+					            </HBox>
+					            <Button fx:id="clearButtonPost" onAction="#clearPost" prefWidth="200.0" text="Очистить" />
+					        </VBox>
+						 </children>
+                   </AnchorPane>
+                   <AnchorPane fx:id="departmentPaneManager" prefHeight="400.0" prefWidth="600.0" visible="false" BorderPane.alignment="CENTER">
+                   </AnchorPane>
+                   <AnchorPane fx:id="candidatePaneManager" prefHeight="400.0" prefWidth="600.0" visible="false" BorderPane.alignment="CENTER">
+                   </AnchorPane>
+                   <AnchorPane fx:id="specialistPaneManager" prefHeight="400.0" prefWidth="600.0" visible="false" BorderPane.alignment="CENTER">
+                   </AnchorPane>
                   </StackPane>
                </center>
             </BorderPane>
