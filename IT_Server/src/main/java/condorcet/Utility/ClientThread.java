@@ -138,14 +138,26 @@ public class ClientThread implements Runnable {
                     	Department requestSchedule = gson.fromJson(request.getRequestMessage(), Department.class);
                     	departmentService.saveEntity(requestSchedule);
                     break;}
+                    case PERSONDATA_ADD:{
+                    	PersonData requestSchedule = gson.fromJson(request.getRequestMessage(), PersonData.class);
+                    	personDataService.saveEntity(requestSchedule);
+                    break;}
                     case DEPARTMENT_UPDATE:{
                     	Department requestSchedule = gson.fromJson(request.getRequestMessage(), Department.class);
                     	departmentService.updateEntity(requestSchedule);
+                    	break;}
+                    case PERSONDATA_UPDATE:{
+                    	PersonData requestSchedule = gson.fromJson(request.getRequestMessage(), PersonData.class);
+                    	personDataService.updateEntity(requestSchedule);
                     	break;}
                     case DEPARTMENT_DELETE:{
                     	Department requestSchedule = gson.fromJson(request.getRequestMessage(), Department.class);
                     	departmentService.deleteEntity(requestSchedule);
                     	break;}
+                    case CANDIDATE:{
+	                    List<Candidate> vacanc = candidateService.findAllEntities();        		                    
+	                    response = new Response(ResponseStatus.OK, "Готово!", gson.toJson(vacanc));
+                    break;}
                     case CANDIDATE_ADD:{
                     	Candidate requestSchedule = gson.fromJson(request.getRequestMessage(), Candidate.class);
                     	candidateService.saveEntity(requestSchedule);
@@ -178,6 +190,8 @@ public class ClientThread implements Runnable {
                     	Specialist requestSchedule = gson.fromJson(request.getRequestMessage(), Specialist.class);
                     	specialistService.deleteEntity(requestSchedule);
                     	break;}
+				default:
+					break;
                     
                 }
                 out.println(gson.toJson(response));

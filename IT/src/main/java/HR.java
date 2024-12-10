@@ -500,7 +500,7 @@ public class HR {
     @FXML 
     private void addDepartment() {
         try {
-            int id = Integer.parseInt(idTextFieldPost.getText());
+            int id = Integer.parseInt(idTextFieldDepartment.getText());
             String pos = nameTextFieldDepartment.getText();
 
             // Проверка уникальности ID
@@ -511,6 +511,7 @@ public class HR {
             
             Department newVacancy = new Department(id, pos);
             departments.add(newVacancy);
+            departmentTable.refresh();
             
             Request requestModel = new Request();
             requestModel.setRequestMessage(new Gson().toJson(newVacancy));
@@ -541,7 +542,7 @@ public class HR {
             // Обновление данных
             selected.setIdDepartment(id);
             selected.setNameDepartment(pos);;
-            postTable.refresh();
+            departmentTable.refresh();
             
             Request requestModel = new Request();
             requestModel.setRequestMessage(new Gson().toJson(selected));
@@ -608,8 +609,15 @@ public class HR {
             Type listType = new TypeToken<List<Vacancy>>() {}.getType();
             List<Vacancy> e = new Gson().fromJson(responseModel.getResponseData(), listType);     
             
-            Candidate newVacancy = new Candidate(new PersonData(id, name,age, mail,phone), getVacancyByName(e,pos),scills,educ);
+            PersonData p = new PersonData(id, name,age, mail,phone);
+            Candidate newVacancy = new Candidate(p, getVacancyByName(e,pos),scills,educ);
             candidates.add(newVacancy);
+            
+            requestModel = new Request();
+            requestModel.setRequestMessage(new Gson().toJson(p));
+            requestModel.setRequestType(RequestType.PERSONDATA_ADD);
+            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+            ClientSocket.getInstance().getOut().flush();
             
             requestModel = new Request();
             requestModel.setRequestMessage(new Gson().toJson(newVacancy));
@@ -638,7 +646,8 @@ public class HR {
             String phone=  phoneTextFieldCandidate.getText();
             String scills= skilsTextFieldCandidate.getText();
             String educ= educationTextFieldCandidate.getText();
-            int age = Integer.parseInt(ageTextFieldCandidate.getText());;
+            int age = Integer.parseInt(ageTextFieldCandidate.getText());
+            
             if (selected.getId().getId() != id) {
             	showAlert("Ошибка", "Введенный индекс выходит за диапазон значений, либо уже используется!");
             	showAlert("Ошибка", "Неправильный формат ввода!");
@@ -653,8 +662,15 @@ public class HR {
             String answer = ClientSocket.getInstance().getInStream().readLine();
             Response responseModel = new Gson().fromJson(answer, Response.class);
             Type listType = new TypeToken<List<Vacancy>>() {}.getType();
-            List<Vacancy> e = new Gson().fromJson(responseModel.getResponseData(), listType);    
-            
+            List<Vacancy> e = new Gson().fromJson(responseModel.getResponseData(), listType);   
+         
+            PersonData tete = new PersonData(id,name,age,mail,phone);
+                   
+            requestModel = new Request();
+            requestModel.setRequestMessage(new Gson().toJson(tete));
+            requestModel.setRequestType(RequestType.PERSONDATA_UPDATE);
+            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+            ClientSocket.getInstance().getOut().flush();
             // Обновление данных
             selected.getId().setId(id);
             selected.getId().setAge(age);
@@ -696,7 +712,9 @@ public class HR {
         System.out.println("Удалено из БД: " + selected);
     }
     @FXML
-    private void clearCandidates() {
+    private void clearCandidate() {
+    	idTextFieldCandidate.clear();
+        ageTextFieldCandidate.clear();
         postComboBoxCandidate.setValue(null);
         nameTextFieldCandidate.clear();
         mailTextFieldCandidate.clear();
@@ -1000,7 +1018,8 @@ public class HR {
         String answer = ClientSocket.getInstance().getInStream().readLine();
         Response responseModel = new Gson().fromJson(answer, Response.class);
         Type listType = new TypeToken<List<Department>>() {}.getType();
-        List<Department> e = new Gson().fromJson(responseModel.getResponseData(), listType);     	
+        List<Department> e = new Gson().fromJson(responseModel.getResponseData(), listType);
+        
         departments = FXCollections.observableArrayList(e);
         departmentTable.setItems(departments);
     };
@@ -1017,6 +1036,21 @@ public class HR {
         List<Candidate> e = new Gson().fromJson(responseModel.getResponseData(), listType);     	
         candidates = FXCollections.observableArrayList(e);
         candidateTable.setItems(candidates);
+        
+        requestModel = new Request();
+        requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser()));
+        requestModel.setRequestType(RequestType.VACANCY);
+        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+        ClientSocket.getInstance().getOut().flush();
+        
+        answer = ClientSocket.getInstance().getInStream().readLine();
+        responseModel = new Gson().fromJson(answer, Response.class);
+        listType = new TypeToken<List<Vacancy>>() {}.getType();
+        List<Vacancy> v = new Gson().fromJson(responseModel.getResponseData(), listType);     	
+        
+        List<String> vs= new ArrayList<>();
+        for(Vacancy t: v) vs.add(t.getPost().getNamePost());
+        postComboBoxCandidate.setItems(FXCollections.observableArrayList(vs));
     };
     private void loadSpecialist()throws IOException{
         Request requestModel = new Request();
@@ -1034,6 +1068,8 @@ public class HR {
         
         List<Specialist> s = new ArrayList<>();
         
+        roleComboBoxSpecialist.setItems(FXCollections.observableArrayList("User", "Admin", "Editor"));
+        
         for(User t: users) {
         	Specialist specialist = t.getSpecialist();
             if (specialist != null) {
@@ -1042,12 +1078,12 @@ public class HR {
                 }
                 s.add(specialist);
             }
-        	specialists.addAll(s);
         	p.add(specialist.getPersonData().getId());
         	pvc.add(specialist.getPersonData());
-        	specialistTable.setItems(specialists);
         }
-
+    	specialists.addAll(s);
+    	specialistTable.setItems(specialists);
+    	
     	requestModel = new Request();
         requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser()));
         requestModel.setRequestType(RequestType.CANDIDATE);
