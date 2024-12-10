@@ -160,6 +160,8 @@ public class HR {
     private TableView<Department> departmentTable;
     @FXML
     private TableView<Candidate> candidateTable;
+    @FXML
+    private TableView<Specialist> specialistTable;
     
     @FXML
     private TableColumn<Vacancy, Integer> idColumn;
@@ -176,8 +178,7 @@ public class HR {
     @FXML
     private TableColumn<Department, Integer> idColumnDepartment;
     @FXML
-    private TableColumn<Department, String> nameColumnDepartment;
-    
+    private TableColumn<Department, String> nameColumnDepartment;  
     @FXML
     private TableColumn<Candidate, Integer> idColumnCandidate;
     @FXML
@@ -194,11 +195,27 @@ public class HR {
     private TableColumn<Candidate, String> skilsColumnCandidate;
     @FXML
     private TableColumn<Candidate, String> educationColumnCandidate;
+    @FXML
+    private TableColumn<Specialist, Integer> idColumnSpecialist;
+    @FXML
+    private TableColumn<Specialist, String> postColumnSpecialist;
+    @FXML
+    private TableColumn<Specialist, String> departmentColumnSpecialist;
+    @FXML
+    private TableColumn<Specialist, String> roleColumnSpecialist;   
     
     @FXML
     private ComboBox<String> positionComboBox;
     @FXML
     private ComboBox<String> postComboBoxCandidate;
+    @FXML
+    private ComboBox<Integer> idComboBoxSpecialist;
+    @FXML
+    private ComboBox<String> postComboBoxSpecialist;
+    @FXML
+    private ComboBox<String> departmentComboBoxSpecialist;
+    @FXML
+    private ComboBox<String> roleComboBoxSpecialist;    
 
     @FXML
     private ListView<String> scheduleListView;
@@ -209,7 +226,10 @@ public class HR {
     private ObservableList<String> positions = FXCollections.observableArrayList();
     private ObservableList<Post> post = FXCollections.observableArrayList();
     private ObservableList<Department> departments = FXCollections.observableArrayList();
-    private ObservableList<Candidate> candidates = FXCollections.observableArrayList();
+    private ObservableList<Candidate> candidates = FXCollections.observableArrayList();   
+    private ObservableList<Specialist> specialists = FXCollections.observableArrayList();
+    private ObservableList<PersonData> pers = FXCollections.observableArrayList();
+    private List<User> users = new ArrayList<User>();
     
     List<Post> p = new ArrayList<Post>();
     
@@ -246,6 +266,12 @@ public class HR {
         skilsColumnCandidate.setCellValueFactory(cellData -> cellData.getValue().skilsProperty());
         educationColumnCandidate.setCellValueFactory(cellData -> cellData.getValue().educationProperty());
         candidateTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> fillFieldsWithCandidate(newValue));
+    
+        idColumnSpecialist.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
+        postColumnSpecialist.setCellValueFactory(cellData -> cellData.getValue().postProperty());
+        departmentColumnSpecialist.setCellValueFactory(cellData -> cellData.getValue().departmentProperty());
+        roleColumnSpecialist.setCellValueFactory(cellData -> cellData.getValue().roleProperty());  
+        specialistTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> fillFieldsWithSpecialist(newValue));
     }
     
     private void showAlert(String title, String message) {
@@ -272,6 +298,28 @@ public class HR {
         }
         for (Vacancy position : positions) {
             if (name.equals(position.getPost().getNamePost())) {
+                return position; // Возвращаем объект, если совпадает имя
+            }
+        }
+        return null; // Если объект с указанным именем не найден
+    }
+    public Department getDepartmentByName(List<Department> positions, String name) {
+        if (positions == null || name == null) {
+            return null; // Если список или имя не указаны, возвращаем null
+        }
+        for (Department position : positions) {
+            if (name.equals(position.getNameDepartment())) {
+                return position; // Возвращаем объект, если совпадает имя
+            }
+        }
+        return null; // Если объект с указанным именем не найден
+    }
+    public PersonData getPersonDataById(List<PersonData> positions, int id) {
+        if (positions == null) {
+            return null; // Если список или имя не указаны, возвращаем null
+        }
+        for (PersonData position : positions) {
+            if (id == position.getId()) {
                 return position; // Возвращаем объект, если совпадает имя
             }
         }
@@ -529,8 +577,7 @@ public class HR {
     	idTextFieldDepartment.clear();
         nameTextFieldDepartment.clear();
     }
-    
-    
+       
     @FXML 
     private void addCandidate() throws IOException {
         try {
@@ -658,7 +705,102 @@ public class HR {
         educationTextFieldCandidate.clear();
     }
     
-    
+    @FXML
+    private void addSpecialist() {
+        try {
+        	int id = idComboBoxSpecialist.getValue();
+            String pos = postComboBoxSpecialist.getValue();
+            String dep = departmentComboBoxSpecialist.getValue();
+            String role = roleComboBoxSpecialist.getValue();
+           
+            // Проверка уникальности ID
+            if (specialists.stream().anyMatch(vacancy -> vacancy.getPersonData().getId() == id)) {
+                showAlert("Ошибка", "ID уже существует!");
+                return;
+            }
+
+            Specialist specialist =  new Specialist(getPersonDataById(pers, id), null, new User(users.stream().mapToInt(User::getIdAccount).max().orElse(0)+1,
+            		"new"+Integer.toString(users.stream().mapToInt(User::getIdAccount).max().orElse(0)+1),
+            		"new"+Integer.toString(users.stream().mapToInt(User::getIdAccount).max().orElse(0)+1),
+            		Roles.valueOf(role),null), getDepartmentByName(departments, dep), getPositionByName(post, pos));
+            
+            specialist.getUser().setSpecialist(specialist);
+            specialists.add(specialist);
+            
+            Request requestModel = new Request();
+            requestModel.setRequestMessage(new Gson().toJson(specialist));
+            requestModel.setRequestType(RequestType.SPECIALIST_ADD);
+            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+            ClientSocket.getInstance().getOut().flush();
+            
+            System.out.println("Добавлено в БД: " + specialist);
+        } catch (NumberFormatException e) {
+            showAlert("Ошибка", "Неправильный формат ввода!");
+        }
+    }  
+    @FXML
+    private void updateSpecialist() {
+        try {
+        	 Specialist selected =  specialistTable.getSelectionModel().getSelectedItem();
+            if (selected == null) {
+                showAlert("Ошибка", "Не выбрана строка для обновления!");
+                return;
+            }
+
+            int id = idComboBoxSpecialist.getValue();
+            String pos = postComboBoxSpecialist.getValue();
+            String dep = departmentComboBoxSpecialist.getValue();
+            String role = roleComboBoxSpecialist.getValue();
+           
+            // Проверка уникальности ID
+            if (specialists.stream().anyMatch(vacancy -> vacancy.getPersonData().getId() == id)) {
+                showAlert("Ошибка", "ID уже существует!");
+                return;
+            }
+            // Обновление данных
+            selected.setPersonData(getPersonDataById(pers, id));;
+            selected.setPosition(getPositionByName(post, pos));
+            selected.setDepartment(getDepartmentByName(departments, dep));
+            selected.getUser().setRole(Roles.valueOf(role));
+            vacancyTable.refresh();
+            
+            Request requestModel = new Request();
+            requestModel.setRequestMessage(new Gson().toJson(selected));
+            requestModel.setRequestType(RequestType.SPECIALIST_UPDATE);
+            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+            ClientSocket.getInstance().getOut().flush();
+            
+            System.out.println("Обновлено в БД: " + selected);
+        } catch (NumberFormatException e) {
+            showAlert("Ошибка", "Неправильный формат ввода!");
+        }
+    }    
+    @FXML
+    private void deleteSpecialist() {
+    	Specialist selected = specialistTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Ошибка", "Не выбрана строка для удаления!");
+            return;
+        }
+
+        specialists.remove(selected);
+
+        Request requestModel = new Request();
+        requestModel.setRequestMessage(new Gson().toJson(selected));
+        requestModel.setRequestType(RequestType.SPECIALIST_DELETE);
+        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+        ClientSocket.getInstance().getOut().flush();
+
+        System.out.println("Удалено из БД: " + selected);
+    }
+    @FXML
+    private void clearSpecialist() {
+    	idComboBoxSpecialist.setValue(null);
+        postComboBoxSpecialist.setValue(null);
+        departmentComboBoxSpecialist.setValue(null);
+        roleComboBoxSpecialist.setValue(null);
+    }
+   
     private Object fillFieldsWithSchedule(Vacancy vacancy) {
         if (vacancy != null) {
         	positionComboBox.setValue(vacancy.getPost().getNamePost());
@@ -695,6 +837,16 @@ public class HR {
         	phoneTextFieldCandidate.setText(String.valueOf(vacancy.getId().getPhoneNumber()));
         	skilsTextFieldCandidate.setText(String.valueOf(vacancy.getSkills()));
         	educationTextFieldCandidate.setText(String.valueOf(vacancy.getEducation()));
+            return vacancy;
+        }
+		return vacancy;       
+	}
+    private Object fillFieldsWithSpecialist(Specialist vacancy) {
+        if (vacancy != null) {
+        	idComboBoxSpecialist.setValue(vacancy.getPersonData().getId());
+            postComboBoxSpecialist.setValue(vacancy.getPosition().getNamePost());
+            departmentComboBoxSpecialist.setValue(vacancy.getDepartment().getNameDepartment());
+            roleComboBoxSpecialist.setValue(vacancy.getUser().getRole().name());
             return vacancy;
         }
 		return vacancy;       
@@ -756,14 +908,15 @@ public class HR {
         candidatePaneManager.setVisible(true);
     }
     @FXML
-    private void specialist_manag_vis() {
+    private void specialist_manag_vis()throws IOException {
     	schedulePane.setVisible(false); // Включаем видимость панели расписания
         profilePane.setVisible(false); // Отключаем видимость панели профиля
         postPaneManager.setVisible(false);
         departmentPaneManager.setVisible(false);
         candidatePaneManager.setVisible(false);
-        specialistPaneManager.setVisible(true);
         vacancyPaneManager.setVisible(false);
+        loadSpecialist();
+        specialistPaneManager.setVisible(true);
     }
        @FXML
     private void post_manag_vis() throws IOException {
@@ -864,6 +1017,89 @@ public class HR {
         List<Candidate> e = new Gson().fromJson(responseModel.getResponseData(), listType);     	
         candidates = FXCollections.observableArrayList(e);
         candidateTable.setItems(candidates);
+    };
+    private void loadSpecialist()throws IOException{
+        Request requestModel = new Request();
+        requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser()));
+        requestModel.setRequestType(RequestType.USERS);
+        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+        ClientSocket.getInstance().getOut().flush();
+        
+        String answer = ClientSocket.getInstance().getInStream().readLine();
+        Response responseModel = new Gson().fromJson(answer, Response.class);
+        Type listType = new TypeToken<List<User>>() {}.getType();
+        users = new Gson().fromJson(responseModel.getResponseData(), listType);   
+        List<Integer> p = new ArrayList<>();
+        List<PersonData> pvc = new ArrayList<>();
+        
+        List<Specialist> s = new ArrayList<>();
+        
+        for(User t: users) {
+        	Specialist specialist = t.getSpecialist();
+            if (specialist != null) {
+                if (specialist.getUser() == null) {
+                    specialist.setUser(t);
+                }
+                s.add(specialist);
+            }
+        	specialists.addAll(s);
+        	p.add(specialist.getPersonData().getId());
+        	pvc.add(specialist.getPersonData());
+        	specialistTable.setItems(specialists);
+        }
+
+    	requestModel = new Request();
+        requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser()));
+        requestModel.setRequestType(RequestType.CANDIDATE);
+        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+        ClientSocket.getInstance().getOut().flush();
+        
+        answer = ClientSocket.getInstance().getInStream().readLine();
+        responseModel = new Gson().fromJson(answer, Response.class);
+        listType = new TypeToken<List<Candidate>>() {}.getType();
+        List<Candidate> e = new Gson().fromJson(responseModel.getResponseData(), listType);     	
+        candidates = FXCollections.observableArrayList(e);      
+        
+        for(Candidate t: e) {
+        	p.add(t.getId().getId());
+        	pvc.add(t.getId());
+        }
+   
+        requestModel = new Request();
+        requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser()));
+        requestModel.setRequestType(RequestType.DEPARTMENT);
+        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+        ClientSocket.getInstance().getOut().flush();
+        
+        answer = ClientSocket.getInstance().getInStream().readLine();
+        responseModel = new Gson().fromJson(answer, Response.class);
+        listType = new TypeToken<List<Department>>() {}.getType();
+        List<Department> d = new Gson().fromJson(responseModel.getResponseData(), listType);  
+        
+        List<String> ds = new ArrayList<String>();
+        for(Department t: d) ds.add(t.getNameDepartment());
+        
+        requestModel = new Request();
+        requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser()));
+        requestModel.setRequestType(RequestType.POST);
+        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+        ClientSocket.getInstance().getOut().flush();
+        
+        answer = ClientSocket.getInstance().getInStream().readLine();
+        responseModel = new Gson().fromJson(answer, Response.class);
+        listType = new TypeToken<List<Post>>() {}.getType();
+        List<Post> pe = new Gson().fromJson(responseModel.getResponseData(), listType);  
+        
+        List<String> pes = new ArrayList<String>();
+        for(Post t: pe) pes.add(t.getNamePost());
+             
+        pers = FXCollections.observableArrayList(pvc);
+        departments = FXCollections.observableArrayList(d);
+        post =  FXCollections.observableArrayList(pe);
+        
+        idComboBoxSpecialist.setItems(FXCollections.observableArrayList(p));
+        postComboBoxSpecialist.setItems(FXCollections.observableArrayList(pes));
+        departmentComboBoxSpecialist.setItems(FXCollections.observableArrayList(ds));
     };
     
     private String formatSchedule(Schedule schedule) {

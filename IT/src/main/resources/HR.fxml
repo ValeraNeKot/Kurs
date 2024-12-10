@@ -172,6 +172,36 @@
 						 </children>
                    </AnchorPane>
                    <AnchorPane fx:id="specialistPaneManager" prefHeight="400.0" prefWidth="600.0" visible="false" BorderPane.alignment="CENTER">
+                    <children>
+					        <TableView fx:id="specialistTable" layoutX="50.0" layoutY="20.0" prefHeight="150.0" prefWidth="500.0">
+					            <columns>
+					                <TableColumn fx:id="idColumnSpecialist" prefWidth="40.0" text="ID" />
+					                <TableColumn fx:id="postColumnSpecialist" prefWidth="60.0" text="Должность" />
+					                <TableColumn fx:id="departmentColumnSpecialist" prefWidth="90.0" text="Отдел" />
+					                <TableColumn fx:id="roleColumnSpecialist" prefWidth="90.0" text="Роль" />
+					            </columns>
+					        </TableView>
+					        <VBox layoutX="50.0" layoutY="400.0" spacing="10.0">
+					           <ComboBox fx:id="idComboBoxSpecialist" prefWidth="40.0" text="ID" />
+					           <ComboBox fx:id="postComboBoxSpecialist" prefWidth="60.0" text="Должность" />
+					           <ComboBox fx:id="departmentComboBoxSpecialist" prefWidth="90.0" text="Отдел" />
+					           <ComboBox fx:id="roleComboBoxSpecialist" prefWidth="90.0" text="Роль" >
+					           		<items>
+								        <FXCollections fx:factory="observableArrayList">
+								            <String fx:value="User" />
+								            <String fx:value="Admin" />
+								            <String fx:value="Editor" />
+								        </FXCollections>
+								    </items>
+								</ComboBox>
+					            <HBox spacing="10.0">
+					                <Button fx:id="addButtonSpecialist" onAction="#addSpecialist" text="Добавить" />
+					                <Button fx:id="updateButtonSpecialist" onAction="#updateSpecialist" text="Изменить" />
+					                <Button fx:id="deleteButtonSpecialist" onAction="#deleteSpecialist" text="Удалить" />
+					            </HBox>
+					            <Button fx:id="clearButtonSpecialist" onAction="#clearSpecialist" prefWidth="200.0" text="Очистить" />
+					        </VBox>
+						 </children>
                    </AnchorPane>
                   </StackPane>
                </center>
