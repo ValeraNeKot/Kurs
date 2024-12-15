@@ -23,6 +23,9 @@ import javafx.stage.Stage;
 import main.Enums.RequestType;
 import main.Enums.ResponseStatus;
 import main.Enums.Roles;
+import main.Models.Entities.Candidate;
+import main.Models.Entities.Department;
+import main.Models.Entities.PersonData;
 import main.Models.Entities.Post;
 import main.Models.Entities.Schedule;
 import main.Models.Entities.Specialist;
@@ -89,7 +92,25 @@ public class HR {
     private TextField nameTextFieldPost;
     @FXML
     private TextField responsibilityTextFieldPost;
-   
+    @FXML
+    private TextField idTextFieldDepartment;
+    @FXML
+    private TextField nameTextFieldDepartment;
+    @FXML
+    private TextField idTextFieldCandidate;
+    @FXML
+    private TextField nameTextFieldCandidate;
+    @FXML
+    private TextField ageTextFieldCandidate;
+    @FXML 
+    private TextField mailTextFieldCandidate;
+    @FXML
+    private TextField phoneTextFieldCandidate;
+    @FXML
+    private TextField skilsTextFieldCandidate;
+    @FXML
+    private TextField educationTextFieldCandidate;
+    
     @FXML
     private Button editButton;
     @FXML
@@ -114,12 +135,33 @@ public class HR {
     private Button deleteButtonPost;
     @FXML
     private Button clearButtonPost;
+    @FXML
+    private Button addButtonDepartment;
+    @FXML
+    private Button updateButtonDepartment;
+    @FXML
+    private Button deleteButtonDepartment;
+    @FXML
+    private Button clearButtonDepartment;    
+    @FXML
+    private Button addButtonCandidate;
+    @FXML
+    private Button updateButtonCandidate;
+    @FXML
+    private Button deleteButtonCandidate;
+    @FXML
+    private Button clearButtonCandidate;
     
     @FXML
     private TableView<Vacancy> vacancyTable;
     @FXML
     private TableView<Post> postTable;
-
+    @FXML
+    private TableView<Department> departmentTable;
+    @FXML
+    private TableView<Candidate> candidateTable;
+    @FXML
+    private TableView<Specialist> specialistTable;
     
     @FXML
     private TableColumn<Vacancy, Integer> idColumn;
@@ -133,10 +175,47 @@ public class HR {
     private TableColumn<Post, String> nameColumn;
     @FXML
     private TableColumn<Post, String> responsibilityColumn;  
-
+    @FXML
+    private TableColumn<Department, Integer> idColumnDepartment;
+    @FXML
+    private TableColumn<Department, String> nameColumnDepartment;  
+    @FXML
+    private TableColumn<Candidate, Integer> idColumnCandidate;
+    @FXML
+    private TableColumn<Candidate, String> nameColumnCandidate;
+    @FXML
+    private TableColumn<Candidate, Integer> ageColumnCandidate;
+    @FXML
+    private TableColumn<Candidate, String> mailColumnCandidate;
+    @FXML
+    private TableColumn<Candidate, String> phoneColumnCandidate;
+    @FXML
+    private TableColumn<Candidate, String> postColumnCandidate;
+    @FXML
+    private TableColumn<Candidate, String> skilsColumnCandidate;
+    @FXML
+    private TableColumn<Candidate, String> educationColumnCandidate;
+    @FXML
+    private TableColumn<Specialist, Integer> idColumnSpecialist;
+    @FXML
+    private TableColumn<Specialist, String> postColumnSpecialist;
+    @FXML
+    private TableColumn<Specialist, String> departmentColumnSpecialist;
+    @FXML
+    private TableColumn<Specialist, String> roleColumnSpecialist;   
+    
     @FXML
     private ComboBox<String> positionComboBox;
-
+    @FXML
+    private ComboBox<String> postComboBoxCandidate;
+    @FXML
+    private ComboBox<Integer> idComboBoxSpecialist;
+    @FXML
+    private ComboBox<String> postComboBoxSpecialist;
+    @FXML
+    private ComboBox<String> departmentComboBoxSpecialist;
+    @FXML
+    private ComboBox<String> roleComboBoxSpecialist;    
 
     @FXML
     private ListView<String> scheduleListView;
@@ -146,6 +225,11 @@ public class HR {
     // Список должностей
     private ObservableList<String> positions = FXCollections.observableArrayList();
     private ObservableList<Post> post = FXCollections.observableArrayList();
+    private ObservableList<Department> departments = FXCollections.observableArrayList();
+    private ObservableList<Candidate> candidates = FXCollections.observableArrayList();   
+    private ObservableList<Specialist> specialists = FXCollections.observableArrayList();
+    private ObservableList<PersonData> pers = FXCollections.observableArrayList();
+    private List<User> users = new ArrayList<User>();
     
     List<Post> p = new ArrayList<Post>();
     
@@ -169,6 +253,25 @@ public class HR {
         responsibilityColumn.setCellValueFactory(cellData -> cellData.getValue().responsibilityProperty());
         postTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> fillFieldsWithPost(newValue));
         
+        idColumnDepartment.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
+        nameColumnDepartment.setCellValueFactory(cellData -> cellData.getValue().postProperty());
+        departmentTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> fillFieldsWithDepartment(newValue));
+        
+        idColumnCandidate.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
+        nameColumnCandidate.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        ageColumnCandidate.setCellValueFactory(cellData -> cellData.getValue().ageProperty().asObject());
+        mailColumnCandidate.setCellValueFactory(cellData -> cellData.getValue().mailProperty());
+        phoneColumnCandidate.setCellValueFactory(cellData -> cellData.getValue().phoneProperty());
+        postColumnCandidate.setCellValueFactory(cellData -> cellData.getValue().postProperty());
+        skilsColumnCandidate.setCellValueFactory(cellData -> cellData.getValue().skilsProperty());
+        educationColumnCandidate.setCellValueFactory(cellData -> cellData.getValue().educationProperty());
+        candidateTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> fillFieldsWithCandidate(newValue));
+    
+        idColumnSpecialist.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
+        postColumnSpecialist.setCellValueFactory(cellData -> cellData.getValue().postProperty());
+        departmentColumnSpecialist.setCellValueFactory(cellData -> cellData.getValue().departmentProperty());
+        roleColumnSpecialist.setCellValueFactory(cellData -> cellData.getValue().roleProperty());  
+        specialistTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> fillFieldsWithSpecialist(newValue));
     }
     
     private void showAlert(String title, String message) {
@@ -189,6 +292,39 @@ public class HR {
         }
         return null; // Если объект с указанным именем не найден
     }
+    public Vacancy getVacancyByName(List<Vacancy> positions, String name) {
+        if (positions == null || name == null) {
+            return null; // Если список или имя не указаны, возвращаем null
+        }
+        for (Vacancy position : positions) {
+            if (name.equals(position.getPost().getNamePost())) {
+                return position; // Возвращаем объект, если совпадает имя
+            }
+        }
+        return null; // Если объект с указанным именем не найден
+    }
+    public Department getDepartmentByName(List<Department> positions, String name) {
+        if (positions == null || name == null) {
+            return null; // Если список или имя не указаны, возвращаем null
+        }
+        for (Department position : positions) {
+            if (name.equals(position.getNameDepartment())) {
+                return position; // Возвращаем объект, если совпадает имя
+            }
+        }
+        return null; // Если объект с указанным именем не найден
+    }
+    public PersonData getPersonDataById(List<PersonData> positions, int id) {
+        if (positions == null) {
+            return null; // Если список или имя не указаны, возвращаем null
+        }
+        for (PersonData position : positions) {
+            if (id == position.getId()) {
+                return position; // Возвращаем объект, если совпадает имя
+            }
+        }
+        return null; // Если объект с указанным именем не найден
+    }
     
     @FXML
     private void addVacancy() {
@@ -196,7 +332,7 @@ public class HR {
             int id = Integer.parseInt(idTextField.getText());
             String position = positionComboBox.getValue();
             int vacancyCount = Integer.parseInt(vacancyCountTextField.getText());
-
+           
             // Проверка уникальности ID
             if (vacancies.stream().anyMatch(vacancy -> vacancy.getId() == id)) {
                 showAlert("Ошибка", "ID уже существует!");
@@ -361,7 +497,335 @@ public class HR {
         responsibilityTextFieldPost.clear();
     }
     
+    @FXML 
+    private void addDepartment() {
+        try {
+            int id = Integer.parseInt(idTextFieldDepartment.getText());
+            String pos = nameTextFieldDepartment.getText();
+
+            // Проверка уникальности ID
+            if (departments.stream().anyMatch(po -> po.getIdDepartment()== id)) {
+                showAlert("Ошибка", "ID уже существует!");
+                return;
+            }           
+            
+            Department newVacancy = new Department(id, pos);
+            departments.add(newVacancy);
+            departmentTable.refresh();
+            
+            Request requestModel = new Request();
+            requestModel.setRequestMessage(new Gson().toJson(newVacancy));
+            requestModel.setRequestType(RequestType.DEPARTMENT_ADD);
+            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+            ClientSocket.getInstance().getOut().flush();
+            
+            System.out.println("Добавлено в БД: " + newVacancy);
+        } catch (NumberFormatException e) {
+            showAlert("Ошибка", "Неправильный формат ввода!");
+        }
+    }    
+    @FXML
+    private void updateDepartment() {
+        try {
+        	Department selected = departmentTable.getSelectionModel().getSelectedItem();
+            if (selected == null) {
+                showAlert("Ошибка", "Не выбрана строка для обновления!");
+                return;
+            }
+
+            int id = Integer.parseInt(idTextFieldDepartment.getText());
+            String pos = nameTextFieldDepartment.getText();
+            if (selected.getIdDepartment() != id) {
+            	showAlert("Ошибка", "Введенный индекс выходит за диапазон значений, либо уже используется!");
+            	showAlert("Ошибка", "Неправильный формат ввода!");
+            }
+            // Обновление данных
+            selected.setIdDepartment(id);
+            selected.setNameDepartment(pos);;
+            departmentTable.refresh();
+            
+            Request requestModel = new Request();
+            requestModel.setRequestMessage(new Gson().toJson(selected));
+            requestModel.setRequestType(RequestType.DEPARTMENT_UPDATE);
+            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+            ClientSocket.getInstance().getOut().flush();
+            
+            System.out.println("Обновлено в БД: " + selected);
+        } catch (NumberFormatException e) {
+            showAlert("Ошибка", "Неправильный формат ввода!");
+        }
+    }    
+    @FXML
+    private void deleteDepartment() {
+    	Department selected = departmentTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Ошибка", "Не выбрана строка для удаления!");
+            return;
+        }
+
+        departments.remove(selected);
+
+        Request requestModel = new Request();
+        requestModel.setRequestMessage(new Gson().toJson(selected));
+        requestModel.setRequestType(RequestType.DEPARTMENT_DELETE);
+        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+        ClientSocket.getInstance().getOut().flush();
+
+        System.out.println("Удалено из БД: " + selected);
+    }
+    @FXML
+    private void clearDepartment() {
+    	idTextFieldDepartment.clear();
+        nameTextFieldDepartment.clear();
+    }
+       
+    @FXML 
+    private void addCandidate() throws IOException {
+        try {
+            int id = Integer.parseInt(idTextFieldCandidate.getText());
+            String pos = postComboBoxCandidate.getValue();
+            String name = nameTextFieldCandidate.getText();
+            String mail = mailTextFieldCandidate.getText();
+            String phone=  phoneTextFieldCandidate.getText();
+            String scills= skilsTextFieldCandidate.getText();
+            String educ= educationTextFieldCandidate.getText();
+            int age = Integer.parseInt(ageTextFieldCandidate.getText());
+        	
+
+            // Проверка уникальности ID
+            if (candidates.stream().anyMatch(po -> po.getId().getId()== id)) {
+                showAlert("Ошибка", "ID уже существует!");
+                return;
+            }           
+            
+            Request requestModel = new Request();
+            requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser()));
+            requestModel.setRequestType(RequestType.VACANCY);
+            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+            ClientSocket.getInstance().getOut().flush();
+            
+            String answer = ClientSocket.getInstance().getInStream().readLine();
+            Response responseModel = new Gson().fromJson(answer, Response.class);
+            Type listType = new TypeToken<List<Vacancy>>() {}.getType();
+            List<Vacancy> e = new Gson().fromJson(responseModel.getResponseData(), listType);     
+            
+            PersonData p = new PersonData(id, name,age, mail,phone);
+            Candidate newVacancy = new Candidate(p, getVacancyByName(e,pos),scills,educ);
+            candidates.add(newVacancy);
+            
+            requestModel = new Request();
+            requestModel.setRequestMessage(new Gson().toJson(p));
+            requestModel.setRequestType(RequestType.PERSONDATA_ADD);
+            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+            ClientSocket.getInstance().getOut().flush();
+            
+            requestModel = new Request();
+            requestModel.setRequestMessage(new Gson().toJson(newVacancy));
+            requestModel.setRequestType(RequestType.CANDIDATE_ADD);
+            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+            ClientSocket.getInstance().getOut().flush();
+            
+            System.out.println("Добавлено в БД: " + newVacancy);
+        } catch (NumberFormatException e) {
+            showAlert("Ошибка", "Неправильный формат ввода!");
+        }
+    }    
+    @FXML
+    private void updateCandidate() throws IOException {
+        try {
+        	Candidate selected = candidateTable.getSelectionModel().getSelectedItem();
+            if (selected == null) {
+                showAlert("Ошибка", "Не выбрана строка для обновления!");
+                return;
+            }
+
+            int id = Integer.parseInt(idTextFieldCandidate.getText());
+            String pos = postComboBoxCandidate.getValue();
+            String name = nameTextFieldCandidate.getText();
+            String mail = mailTextFieldCandidate.getText();
+            String phone=  phoneTextFieldCandidate.getText();
+            String scills= skilsTextFieldCandidate.getText();
+            String educ= educationTextFieldCandidate.getText();
+            int age = Integer.parseInt(ageTextFieldCandidate.getText());
+            
+            if (selected.getId().getId() != id) {
+            	showAlert("Ошибка", "Введенный индекс выходит за диапазон значений, либо уже используется!");
+            	showAlert("Ошибка", "Неправильный формат ввода!");
+            }
+            
+            Request requestModel = new Request();
+            requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser()));
+            requestModel.setRequestType(RequestType.VACANCY);
+            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+            ClientSocket.getInstance().getOut().flush();
+            
+            String answer = ClientSocket.getInstance().getInStream().readLine();
+            Response responseModel = new Gson().fromJson(answer, Response.class);
+            Type listType = new TypeToken<List<Vacancy>>() {}.getType();
+            List<Vacancy> e = new Gson().fromJson(responseModel.getResponseData(), listType);   
+         
+            PersonData tete = new PersonData(id,name,age,mail,phone);
+                   
+            requestModel = new Request();
+            requestModel.setRequestMessage(new Gson().toJson(tete));
+            requestModel.setRequestType(RequestType.PERSONDATA_UPDATE);
+            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+            ClientSocket.getInstance().getOut().flush();
+            // Обновление данных
+            selected.getId().setId(id);
+            selected.getId().setAge(age);
+            selected.getId().setName(name);
+            selected.getId().setMail(mail);
+            selected.getId().setPhoneNumber(phone);
+            selected.setVacancy(getVacancyByName(e,pos));
+            selected.setEducation(educ);
+            selected.setSkills(scills);
+            candidateTable.refresh();
+            
+            requestModel = new Request();
+            requestModel.setRequestMessage(new Gson().toJson(selected));
+            requestModel.setRequestType(RequestType.CANDIDATE_UPDATE);
+            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+            ClientSocket.getInstance().getOut().flush();
+            
+            System.out.println("Обновлено в БД: " + selected);
+        } catch (NumberFormatException e) {
+            showAlert("Ошибка", "Неправильный формат ввода!");
+        }
+    }    
+    @FXML
+    private void deleteCandidate() {
+    	Candidate selected = candidateTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Ошибка", "Не выбрана строка для удаления!");
+            return;
+        }
+
+        candidates.remove(selected);
+
+        Request requestModel = new Request();
+        requestModel.setRequestMessage(new Gson().toJson(selected));
+        requestModel.setRequestType(RequestType.CANDIDATE_DELETE);
+        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+        ClientSocket.getInstance().getOut().flush();
+
+        System.out.println("Удалено из БД: " + selected);
+    }
+    @FXML
+    private void clearCandidate() {
+    	idTextFieldCandidate.clear();
+        ageTextFieldCandidate.clear();
+        postComboBoxCandidate.setValue(null);
+        nameTextFieldCandidate.clear();
+        mailTextFieldCandidate.clear();
+        phoneTextFieldCandidate.clear();
+        skilsTextFieldCandidate.clear();
+        educationTextFieldCandidate.clear();
+    }
     
+    @FXML
+    private void addSpecialist() {
+        try {
+        	int id = idComboBoxSpecialist.getValue();
+            String pos = postComboBoxSpecialist.getValue();
+            String dep = departmentComboBoxSpecialist.getValue();
+            String role = roleComboBoxSpecialist.getValue();
+           
+            // Проверка уникальности ID
+            if (specialists.stream().anyMatch(vacancy -> vacancy.getPersonData().getId() == id)) {
+                showAlert("Ошибка", "ID уже существует!");
+                return;
+            }
+
+            Specialist specialist =  new Specialist(getPersonDataById(pers, id), null, new User(users.stream().mapToInt(User::getIdAccount).max().orElse(0)+1,
+            		"new"+Integer.toString(users.stream().mapToInt(User::getIdAccount).max().orElse(0)+1),
+            		"new"+Integer.toString(users.stream().mapToInt(User::getIdAccount).max().orElse(0)+1),
+            		Roles.valueOf(role), null), getDepartmentByName(departments, dep), getPositionByName(post, pos));
+            
+            specialist.getUser().setSpecialist(specialist);
+
+            
+            Request requestModel = new Request();
+            requestModel.setRequestMessage(new Gson().toJson(specialist));
+            requestModel.setRequestType(RequestType.SPECIALIST_ADD);
+            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+            ClientSocket.getInstance().getOut().flush();
+            
+            specialists.add(specialist);
+            
+            System.out.println("Добавлено в БД: " + specialist);
+        } catch (NumberFormatException e) {
+            showAlert("Ошибка", "Неправильный формат ввода!");
+        }
+    }  
+    @FXML
+    private void updateSpecialist() {
+        try {
+        	 Specialist selected =  specialistTable.getSelectionModel().getSelectedItem();
+            if (selected == null) {
+                showAlert("Ошибка", "Не выбрана строка для обновления!");
+                return;
+            }
+
+            int id = idComboBoxSpecialist.getValue();
+            String pos = postComboBoxSpecialist.getValue();
+            String dep = departmentComboBoxSpecialist.getValue();
+            String role = roleComboBoxSpecialist.getValue();
+           
+            // Проверка уникальности ID
+            if (selected.getPersonData().getId() != id) {
+                showAlert("Ошибка", "ID уже существует!");
+                return;
+            }
+            // Обновление данных
+            selected.setPersonData(getPersonDataById(pers, id));;
+            selected.setPosition(getPositionByName(post, pos));
+            selected.setDepartment(getDepartmentByName(departments, dep));
+            selected.getUser().setRole(Roles.valueOf(role));
+            vacancyTable.refresh();
+            
+            Request requestModel = new Request();
+            requestModel.setRequestMessage(new Gson().toJson(selected));
+            requestModel.setRequestType(RequestType.SPECIALIST_UPDATE);
+            ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+            ClientSocket.getInstance().getOut().flush();
+            
+            System.out.println("Обновлено в БД: " + selected);
+        } catch (NumberFormatException e) {
+            showAlert("Ошибка", "Неправильный формат ввода!");
+        }
+    }    
+    @FXML
+    private void deleteSpecialist() {
+    	Specialist selected = specialistTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            showAlert("Ошибка", "Не выбрана строка для удаления!");
+            return;
+        }
+        if (selected.getUser().getIdAccount()== ClientSocket.getInstance().getUser().getIdAccount()) {
+            showAlert("Ошибка", "Нельзя удалить самого себя!");
+            return;
+        }
+        
+
+        Request requestModel = new Request();
+        requestModel.setRequestMessage(new Gson().toJson(selected));
+        requestModel.setRequestType(RequestType.SPECIALIST_DELETE);
+        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+        ClientSocket.getInstance().getOut().flush();
+        
+        specialists.remove(selected);
+        
+        System.out.println("Удалено из БД: " + selected);
+    }
+    @FXML
+    private void clearSpecialist() {
+    	idComboBoxSpecialist.setValue(null);
+        postComboBoxSpecialist.setValue(null);
+        departmentComboBoxSpecialist.setValue(null);
+        roleComboBoxSpecialist.setValue(null);
+    }
+   
     private Object fillFieldsWithSchedule(Vacancy vacancy) {
         if (vacancy != null) {
         	positionComboBox.setValue(vacancy.getPost().getNamePost());
@@ -370,13 +834,44 @@ public class HR {
             return vacancy;
         }
 		return vacancy;       
-	}
-    
+	}    
     private Object fillFieldsWithPost(Post vacancy) {
         if (vacancy != null) {
         	idTextFieldPost.setText(String.valueOf(vacancy.getIdPost()));
         	nameTextFieldPost.setText(vacancy.getNamePost());
         	responsibilityTextFieldPost.setText(vacancy.getResponsibility());
+            return vacancy;
+        }
+		return vacancy;       
+	}
+    private Object fillFieldsWithDepartment(Department vacancy) {
+        if (vacancy != null) {
+        	idTextFieldDepartment.setText(String.valueOf(vacancy.getIdDepartment()));
+        	nameTextFieldDepartment.setText(vacancy.getNameDepartment());
+            return vacancy;
+        }
+		return vacancy;       
+	}
+    private Object fillFieldsWithCandidate(Candidate vacancy) {
+        if (vacancy != null) {
+        	postComboBoxCandidate.setValue(vacancy.getVacancy().getPost().getNamePost());
+        	idTextFieldCandidate.setText(String.valueOf(vacancy.getId().getId()));
+        	nameTextFieldCandidate.setText(String.valueOf(vacancy.getId().getName()));
+        	ageTextFieldCandidate.setText(String.valueOf(vacancy.getId().getAge()));
+        	mailTextFieldCandidate.setText(String.valueOf(vacancy.getId().getMail()));
+        	phoneTextFieldCandidate.setText(String.valueOf(vacancy.getId().getPhoneNumber()));
+        	skilsTextFieldCandidate.setText(String.valueOf(vacancy.getSkills()));
+        	educationTextFieldCandidate.setText(String.valueOf(vacancy.getEducation()));
+            return vacancy;
+        }
+		return vacancy;       
+	}
+    private Object fillFieldsWithSpecialist(Specialist vacancy) {
+        if (vacancy != null) {
+        	idComboBoxSpecialist.setValue(vacancy.getPersonData().getId());
+            postComboBoxSpecialist.setValue(vacancy.getPosition().getNamePost());
+            departmentComboBoxSpecialist.setValue(vacancy.getDepartment().getNameDepartment());
+            roleComboBoxSpecialist.setValue(vacancy.getUser().getRole().name());
             return vacancy;
         }
 		return vacancy;       
@@ -416,34 +911,37 @@ public class HR {
         vacancyPaneManager.setVisible(true);
     }
     @FXML
-    private void department_manag_vis() {
+    private void department_manag_vis() throws IOException {
     	schedulePane.setVisible(false); // Включаем видимость панели расписания
         profilePane.setVisible(false); // Отключаем видимость панели профиля
-        postPaneManager.setVisible(false);
-        departmentPaneManager.setVisible(true);
+        postPaneManager.setVisible(false);        
         candidatePaneManager.setVisible(false);
         specialistPaneManager.setVisible(false);
         vacancyPaneManager.setVisible(false);
+        loadDepartment();
+        departmentPaneManager.setVisible(true);
     }    
     @FXML
-    private void candidate_manag_vis() {
+    private void candidate_manag_vis() throws IOException {
     	schedulePane.setVisible(false); // Включаем видимость панели расписания
         profilePane.setVisible(false); // Отключаем видимость панели профиля
         postPaneManager.setVisible(false);
         departmentPaneManager.setVisible(false);
-        candidatePaneManager.setVisible(true);
         specialistPaneManager.setVisible(false);
         vacancyPaneManager.setVisible(false);
+        loadCandidate();
+        candidatePaneManager.setVisible(true);
     }
     @FXML
-    private void specialist_manag_vis() {
+    private void specialist_manag_vis()throws IOException {
     	schedulePane.setVisible(false); // Включаем видимость панели расписания
         profilePane.setVisible(false); // Отключаем видимость панели профиля
         postPaneManager.setVisible(false);
         departmentPaneManager.setVisible(false);
         candidatePaneManager.setVisible(false);
-        specialistPaneManager.setVisible(true);
         vacancyPaneManager.setVisible(false);
+        loadSpecialist();
+        specialistPaneManager.setVisible(true);
     }
        @FXML
     private void post_manag_vis() throws IOException {
@@ -471,10 +969,7 @@ public class HR {
         post = FXCollections.observableArrayList(e);
                 
         postTable.setItems(post);   	
-    };
-    
-   
-    
+    };  
     private void loadScheduleData() {
         if (ClientSocket.getInstance().getUser().getSpecialist() != null && ClientSocket.getInstance().getUser().getSpecialist().getSchedules() != null) {
             List<Schedule> schedules = ClientSocket.getInstance().getUser().getSpecialist().getSchedules();
@@ -520,8 +1015,136 @@ public class HR {
         positionComboBox.setItems(positions);
     	
     };
+    private void loadDepartment() throws IOException {
+    	Request requestModel = new Request();
+        requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser()));
+        requestModel.setRequestType(RequestType.DEPARTMENT);
+        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+        ClientSocket.getInstance().getOut().flush();
+        
+        String answer = ClientSocket.getInstance().getInStream().readLine();
+        Response responseModel = new Gson().fromJson(answer, Response.class);
+        Type listType = new TypeToken<List<Department>>() {}.getType();
+        List<Department> e = new Gson().fromJson(responseModel.getResponseData(), listType);
+        
+        departments = FXCollections.observableArrayList(e);
+        departmentTable.setItems(departments);
+    };
+    private void loadCandidate()  throws IOException{
+    	Request requestModel = new Request();
+        requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser()));
+        requestModel.setRequestType(RequestType.CANDIDATE);
+        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+        ClientSocket.getInstance().getOut().flush();
+        
+        String answer = ClientSocket.getInstance().getInStream().readLine();
+        Response responseModel = new Gson().fromJson(answer, Response.class);
+        Type listType = new TypeToken<List<Candidate>>() {}.getType();
+        List<Candidate> e = new Gson().fromJson(responseModel.getResponseData(), listType);     	
+        candidates = FXCollections.observableArrayList(e);
+        candidateTable.setItems(candidates);
+        
+        requestModel = new Request();
+        requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser()));
+        requestModel.setRequestType(RequestType.VACANCY);
+        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+        ClientSocket.getInstance().getOut().flush();
+        
+        answer = ClientSocket.getInstance().getInStream().readLine();
+        responseModel = new Gson().fromJson(answer, Response.class);
+        listType = new TypeToken<List<Vacancy>>() {}.getType();
+        List<Vacancy> v = new Gson().fromJson(responseModel.getResponseData(), listType);     	
+        
+        List<String> vs= new ArrayList<>();
+        for(Vacancy t: v) vs.add(t.getPost().getNamePost());
+        postComboBoxCandidate.setItems(FXCollections.observableArrayList(vs));
+    };
+    private void loadSpecialist()throws IOException{
+        Request requestModel = new Request();
+        requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser()));
+        requestModel.setRequestType(RequestType.USERS);
+        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+        ClientSocket.getInstance().getOut().flush();
+        
+        String answer = ClientSocket.getInstance().getInStream().readLine();
+        Response responseModel = new Gson().fromJson(answer, Response.class);
+        Type listType = new TypeToken<List<User>>() {}.getType();
+        users = new Gson().fromJson(responseModel.getResponseData(), listType);   
+        List<Integer> p = new ArrayList<>();
+        List<PersonData> pvc = new ArrayList<>();
+        
+        List<Specialist> s = new ArrayList<>();
+        
+        roleComboBoxSpecialist.setItems(FXCollections.observableArrayList("User", "Admin", "Editor"));
+        
+        for(User t: users) {
+        	Specialist specialist = t.getSpecialist();
+            if (specialist != null) {
+                if (specialist.getUser() == null) {
+                    specialist.setUser(t);
+                }
+                s.add(specialist);
+            }
+        	p.add(specialist.getPersonData().getId());
+        	pvc.add(specialist.getPersonData());
+        }
+    	specialists.addAll(s);
+    	specialistTable.setItems(specialists);
+    	
+    	requestModel = new Request();
+        requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser()));
+        requestModel.setRequestType(RequestType.CANDIDATE);
+        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+        ClientSocket.getInstance().getOut().flush();
+        
+        answer = ClientSocket.getInstance().getInStream().readLine();
+        responseModel = new Gson().fromJson(answer, Response.class);
+        listType = new TypeToken<List<Candidate>>() {}.getType();
+        List<Candidate> e = new Gson().fromJson(responseModel.getResponseData(), listType);     	
+        candidates = FXCollections.observableArrayList(e);      
+        
+        for(Candidate t: e) {
+        	p.add(t.getId().getId());
+        	pvc.add(t.getId());
+        }
+   
+        requestModel = new Request();
+        requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser()));
+        requestModel.setRequestType(RequestType.DEPARTMENT);
+        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+        ClientSocket.getInstance().getOut().flush();
+        
+        answer = ClientSocket.getInstance().getInStream().readLine();
+        responseModel = new Gson().fromJson(answer, Response.class);
+        listType = new TypeToken<List<Department>>() {}.getType();
+        List<Department> d = new Gson().fromJson(responseModel.getResponseData(), listType);  
+        
+        List<String> ds = new ArrayList<String>();
+        for(Department t: d) ds.add(t.getNameDepartment());
+        
+        requestModel = new Request();
+        requestModel.setRequestMessage(new Gson().toJson(ClientSocket.getInstance().getUser()));
+        requestModel.setRequestType(RequestType.POST);
+        ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
+        ClientSocket.getInstance().getOut().flush();
+        
+        answer = ClientSocket.getInstance().getInStream().readLine();
+        responseModel = new Gson().fromJson(answer, Response.class);
+        listType = new TypeToken<List<Post>>() {}.getType();
+        List<Post> pe = new Gson().fromJson(responseModel.getResponseData(), listType);  
+        
+        List<String> pes = new ArrayList<String>();
+        for(Post t: pe) pes.add(t.getNamePost());
+             
+        pers = FXCollections.observableArrayList(pvc);
+        departments = FXCollections.observableArrayList(d);
+        post =  FXCollections.observableArrayList(pe);
+        
+        idComboBoxSpecialist.setItems(FXCollections.observableArrayList(p));
+        postComboBoxSpecialist.setItems(FXCollections.observableArrayList(pes));
+        departmentComboBoxSpecialist.setItems(FXCollections.observableArrayList(ds));
+    };
     
-
     private String formatSchedule(Schedule schedule) {
     	String beginTime = schedule.getBeginTime();
     	String endTime = schedule.getEndTime();

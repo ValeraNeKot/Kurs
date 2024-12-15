@@ -29,6 +29,14 @@ public class PersonData implements Serializable{
 		Mail = mail;
 		PhoneNumber = phoneNumber;
 	}
+    
+    public PersonData(String name, int age, String mail, String phoneNumber) {
+		super();
+		Name = name;
+		Age = age;
+		Mail = mail;
+		PhoneNumber = phoneNumber;
+	}
 
 	public int getId() {
 		return Id;

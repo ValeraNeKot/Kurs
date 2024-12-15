@@ -5,7 +5,6 @@ import javax.persistence.*;
 import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -31,11 +30,24 @@ public class Specialist implements Serializable {
 		this.department = department;
 		this.position = position;
 	}
+	
+	
 
 
+	 public javafx.beans.property.IntegerProperty idProperty() {
+	        return new javafx.beans.property.SimpleIntegerProperty(personData.getId());
+	    }
 
-
-
+	 public javafx.beans.property.StringProperty postProperty() {
+	        return new javafx.beans.property.SimpleStringProperty(position.getNamePost());
+	    }
+	 
+	 public javafx.beans.property.StringProperty departmentProperty() {
+	        return new javafx.beans.property.SimpleStringProperty(department.getNameDepartment());
+	    }
+	 public javafx.beans.property.StringProperty roleProperty() {
+	        return new javafx.beans.property.SimpleStringProperty(user.getRole().name());
+	    }
 	@Override
 	public int hashCode() {
 		return Objects.hash(Schedules, department,  personData, position, user);

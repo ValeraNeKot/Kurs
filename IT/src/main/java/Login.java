@@ -71,12 +71,4 @@ public class Login {
         }
     }
 
-	/*
-	 * public void Register_Pressed(ActionEvent actionEvent) throws IOException {
-	 * Stage stage = (Stage) buttonLogin.getScene().getWindow(); Parent root =
-	 * FXMLLoader.load(getClass().getResource("Register.fxml")); Scene newScene =
-	 * new Scene(root); stage.setScene(newScene);
-	 * 
-	 * }
-	 */
 }

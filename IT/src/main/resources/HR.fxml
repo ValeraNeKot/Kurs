@@ -18,11 +18,11 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="HR">
    <children>
-      <AnchorPane prefHeight="501.0" prefWidth="889.0">
+      <AnchorPane prefHeight="715.0" prefWidth="831.0" StackPane.alignment="CENTER">
          <children>
-            <BorderPane layoutX="130.0" layoutY="86.0" prefHeight="600.0" prefWidth="1000.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <BorderPane prefHeight="506.0" prefWidth="800.0">
                <left>
-                  <AnchorPane prefHeight="501.0" prefWidth="10.0" BorderPane.alignment="CENTER">
+                  <AnchorPane prefHeight="699.0" prefWidth="231.0" BorderPane.alignment="CENTER">
                      <children>
                         <Label layoutX="67.0" layoutY="56.0" text="Меню HR-a">
                            <font>
@@ -31,18 +31,18 @@
                         </Label>
                         <Button fx:id="Profil" layoutX="45.0" layoutY="120.0" mnemonicParsing="false" onAction="#profil_vis" prefHeight="30.0" prefWidth="140.0" text="Профиль" />
                         <Button fx:id="Schedule" layoutX="45.0" layoutY="160.0" mnemonicParsing="false" onAction="#schedule_vis" prefHeight="30.0" prefWidth="140.0" text="График работы" />
-                        <Button fx:id="VacanyManage" layoutX="45.0" layoutY="200.0" mnemonicParsing="false" onAction="#vacancy_manag_vis" prefHeight="30.0" prefWidth="140.0" text="Вакансии" />
+                        <Button fx:id="VacancyManage" layoutX="45.0" layoutY="200.0" mnemonicParsing="false" onAction="#vacancy_manag_vis" prefHeight="30.0" prefWidth="140.0" text="Вакансии" />
                         <Button fx:id="Exit" layoutX="45.0" layoutY="440.0" mnemonicParsing="false" onAction="#back" prefHeight="30.0" prefWidth="140.0" text="Выход" />                   
                         <Button fx:id="PostManage" layoutX="45.0" layoutY="240.0" mnemonicParsing="false" onAction="#post_manag_vis" prefHeight="30.0" prefWidth="140.0" text="Должности" />
                         <Button fx:id="DepartmentManage" layoutX="45.0" layoutY="280.0" mnemonicParsing="false" onAction="#department_manag_vis" prefHeight="30.0" prefWidth="140.0" text="Отделы" />
                         <Button fx:id="CandidateManage" layoutX="45.0" layoutY="320.0" mnemonicParsing="false" onAction="#candidate_manag_vis" prefHeight="30.0" prefWidth="140.0" text="Кандидаты" />
-                        <Button fx:id="SpecialistManage" layoutX="45.0" layoutY="360.0" mnemonicParsing="false" onAction="#vacancy_manag_vis" prefHeight="30.0" prefWidth="140.0" text="Специалисты" />
+                        <Button fx:id="SpecialistManage" layoutX="45.0" layoutY="360.0" mnemonicParsing="false" onAction="#specialist_manag_vis" prefHeight="30.0" prefWidth="140.0" text="Специалисты" />
                          <Line endX="100.0" endY="-38.0" layoutX="130.0" layoutY="47.0" startX="100.0" startY="444.4" stroke="#00000076" />
                      </children>
                   </AnchorPane>
                </left>
                <center>
-               <StackPane prefHeight="501.0" prefWidth="669.0">
+               <StackPane prefHeight="563.0" prefWidth="600.0">
                    <AnchorPane fx:id="profilePane" prefHeight="501.0" prefWidth="564.0" visible="false" BorderPane.alignment="CENTER">
                      <children>
                         <Label layoutX="100.0" layoutY="20.0" text="Профиль пользователя" />
@@ -120,10 +120,80 @@
 						 </children>
                    </AnchorPane>
                    <AnchorPane fx:id="departmentPaneManager" prefHeight="400.0" prefWidth="600.0" visible="false" BorderPane.alignment="CENTER">
+                    <children>
+					        <TableView fx:id="departmentTable" layoutX="50.0" layoutY="20.0" prefHeight="150.0" prefWidth="500.0">
+					            <columns>
+					                <TableColumn fx:id="idColumnDepartment" prefWidth="100.0" text="ID" />
+					                <TableColumn fx:id="nameColumnDepartment" prefWidth="200.0" text="Отдел" />
+					            </columns>
+					        </TableView>
+					        <VBox layoutX="50.0" layoutY="200.0" spacing="10.0">
+					            <TextField fx:id="idTextFieldDepartment" prefWidth="200.0" promptText="ID" />      
+					            <TextField fx:id="nameTextFieldDepartment" prefWidth="200.0" promptText="Название" />
+					            <HBox spacing="10.0">
+					                <Button fx:id="addButtonDepartment" onAction="#addDepartment" text="Добавить" />
+					                <Button fx:id="updateButtonDepartment" onAction="#updateDepartment" text="Изменить" />
+					                <Button fx:id="deleteButtonDepartment" onAction="#deleteDepartment" text="Удалить" />
+					            </HBox>
+					            <Button fx:id="clearButtonDepartment" onAction="#clearDepartment" prefWidth="200.0" text="Очистить" />
+					        </VBox>
+						 </children>
                    </AnchorPane>
                    <AnchorPane fx:id="candidatePaneManager" prefHeight="400.0" prefWidth="600.0" visible="false" BorderPane.alignment="CENTER">
+                   <children>
+					            <Button fx:id="clearButtonCandidate" layoutX="300.0" layoutY="400.0" onAction="#clearCandidate" prefWidth="200.0" text="Очистить" />
+					            <HBox layoutX="300.0" layoutY="300.0" spacing="10.0">
+					                <Button fx:id="addButtonCandidate" onAction="#addCandidate" text="Добавить" />
+					                <Button fx:id="updateButtonCandidate" onAction="#updateCandidate" text="Изменить" />
+					                <Button fx:id="deleteButtonCandidate" onAction="#deleteCandidate" text="Удалить" />
+					            </HBox>
+					        <TableView fx:id="candidateTable" layoutX="0" layoutY="20.0" prefHeight="170.0" prefWidth="600.0">
+					            <columns>
+					                <TableColumn fx:id="idColumnCandidate" prefWidth="40.0" text="ID" />
+					                <TableColumn fx:id="nameColumnCandidate" prefWidth="100.0" text="ФИО" />
+					                <TableColumn fx:id="ageColumnCandidate" prefWidth="50.0" text="Возраст" />
+					                <TableColumn fx:id="mailColumnCandidate" prefWidth="70.0" text="Email" />
+					                <TableColumn fx:id="phoneColumnCandidate" prefWidth="80.0" text="Номер тел." />
+					                <TableColumn fx:id="postColumnCandidate" prefWidth="60.0" text="Должность" />
+					                <TableColumn fx:id="skilsColumnCandidate" prefWidth="90.0" text="Навыки" />
+					                <TableColumn fx:id="educationColumnCandidate" prefWidth="90.0" text="Образование" />
+					            </columns>
+					        </TableView>
+					        <VBox layoutX="50.0" layoutY="210.0" spacing="10.0">
+					            <TextField fx:id="idTextFieldCandidate" prefWidth="200.0" promptText="ID" />      
+					            <TextField fx:id="nameTextFieldCandidate" prefWidth="100.0" text="ФИО" />
+					            <TextField fx:id="ageTextFieldCandidate" prefWidth="50.0" text="Возраст" />
+					            <TextField fx:id="mailTextFieldCandidate" prefWidth="90.0" text="Email" />
+					            <TextField fx:id="phoneTextFieldCandidate" prefWidth="90.0" text="Номер тел." />
+					            <ComboBox fx:id="postComboBoxCandidate" prefWidth="80.0" />
+					            <TextField fx:id="skilsTextFieldCandidate" prefWidth="90.0" text="Навыки" />
+					            <TextField fx:id="educationTextFieldCandidate" prefWidth="90.0" text="Образование" />
+					        </VBox>
+						 </children>
                    </AnchorPane>
                    <AnchorPane fx:id="specialistPaneManager" prefHeight="400.0" prefWidth="600.0" visible="false" BorderPane.alignment="CENTER">
+                    <children>
+					        <TableView fx:id="specialistTable" layoutX="83.0" layoutY="20.0" prefHeight="150.0" prefWidth="437.0">
+					            <columns>
+					                <TableColumn fx:id="idColumnSpecialist" minWidth="40.0" prefWidth="70.0" text="ID" />
+					                <TableColumn fx:id="postColumnSpecialist" prefWidth="70.0" text="Должность" />
+					                <TableColumn fx:id="departmentColumnSpecialist" minWidth="70.0" prefWidth="200.0" text="Отдел" />
+					                <TableColumn fx:id="roleColumnSpecialist" prefWidth="100.0" text="Роль" />
+					            </columns>
+					        </TableView>
+					        <VBox layoutX="50.0" layoutY="250.0" spacing="10.0">
+					           <ComboBox fx:id="idComboBoxSpecialist" prefHeight="26.0" prefWidth="178.0" />
+					           <ComboBox fx:id="postComboBoxSpecialist" prefHeight="26.0" prefWidth="178.0" />
+					           <ComboBox fx:id="departmentComboBoxSpecialist" prefHeight="26.0" prefWidth="192.0" />
+					           <ComboBox fx:id="roleComboBoxSpecialist" prefHeight="26.0" prefWidth="197.0" />
+					            <HBox spacing="10.0">
+					                <Button fx:id="addButtonSpecialist" onAction="#addSpecialist" text="Добавить" />
+					                <Button fx:id="updateButtonSpecialist" onAction="#updateSpecialist" text="Изменить" />
+					                <Button fx:id="deleteButtonSpecialist" onAction="#deleteSpecialist" text="Удалить" />
+					            </HBox>
+					            <Button fx:id="clearButtonSpecialist" onAction="#clearSpecialist" prefWidth="200.0" text="Очистить" />
+					        </VBox>
+						 </children>
                    </AnchorPane>
                   </StackPane>
                </center>

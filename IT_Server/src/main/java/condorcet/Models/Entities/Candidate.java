@@ -33,27 +33,23 @@ public class Candidate implements Serializable {
     @Column(name = "education")
     @Expose
     private String education;
-    @Column(name = "past_jobs")
-    @Expose
-    private String pastJobs;
 
 	
 	public Candidate() {}
 
 
-	public Candidate(PersonData id, Vacancy vacancy, String skills, String education, String pastJobs) {
+	public Candidate(PersonData id, Vacancy vacancy, String skills, String education) {
 		super();
 		this.id = id;
 		this.vacancy = vacancy;
 		this.skills = skills;
 		this.education = education;
-		this.pastJobs = pastJobs;
 	}
 
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(education, id, pastJobs, skills, vacancy);
+		return Objects.hash(education, id, skills, vacancy);
 	}
 
 
@@ -67,7 +63,7 @@ public class Candidate implements Serializable {
 			return false;
 		Candidate other = (Candidate) obj;
 		return Objects.equals(education, other.education) && Objects.equals(id, other.id)
-				&& Objects.equals(pastJobs, other.pastJobs) && Objects.equals(skills, other.skills)
+				 && Objects.equals(skills, other.skills)
 				&& Objects.equals(vacancy, other.vacancy);
 	}
 
@@ -111,16 +107,4 @@ public class Candidate implements Serializable {
 		this.education = education;
 	}
 
-
-	public String getPastJobs() {
-		return pastJobs;
-	}
-
-
-	public void setPastJobs(String pastJobs) {
-		this.pastJobs = pastJobs;
-	};
-	
-	
-	
 }

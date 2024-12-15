@@ -25,26 +25,46 @@ public class Candidate implements Serializable {
     private String skills;
 	@Expose
     private String education;
-	@Expose
-    private String pastJobs;
-
 	
 	public Candidate() {}
 
-
-	public Candidate(PersonData id, Vacancy vacancy, String skills, String education, String pastJobs) {
+	public javafx.beans.property.IntegerProperty idProperty() {
+        return new javafx.beans.property.SimpleIntegerProperty(id.getId());
+    }
+	public javafx.beans.property.IntegerProperty ageProperty() {
+        return new javafx.beans.property.SimpleIntegerProperty(id.getAge());
+    }
+    public javafx.beans.property.StringProperty mailProperty() {
+        return new javafx.beans.property.SimpleStringProperty(id.getMail());
+    }
+    public javafx.beans.property.StringProperty nameProperty() {
+        return new javafx.beans.property.SimpleStringProperty(id.getName());
+    }
+    public javafx.beans.property.StringProperty phoneProperty() {
+        return new javafx.beans.property.SimpleStringProperty(id.getPhoneNumber());
+    }
+    public javafx.beans.property.StringProperty postProperty() {
+        return new javafx.beans.property.SimpleStringProperty(vacancy.getPost().getNamePost());
+    }
+    public javafx.beans.property.StringProperty skilsProperty() {
+        return new javafx.beans.property.SimpleStringProperty(skills);
+    }
+    public javafx.beans.property.StringProperty educationProperty() {
+        return new javafx.beans.property.SimpleStringProperty(education);
+    }
+    
+	public Candidate(PersonData id, Vacancy vacancy, String skills, String education) {
 		super();
 		this.id = id;
 		this.vacancy = vacancy;
 		this.skills = skills;
 		this.education = education;
-		this.pastJobs = pastJobs;
 	}
 
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(education, id, pastJobs, skills, vacancy);
+		return Objects.hash(education, id, skills, vacancy);
 	}
 
 
@@ -58,7 +78,7 @@ public class Candidate implements Serializable {
 			return false;
 		Candidate other = (Candidate) obj;
 		return Objects.equals(education, other.education) && Objects.equals(id, other.id)
-				&& Objects.equals(pastJobs, other.pastJobs) && Objects.equals(skills, other.skills)
+				 && Objects.equals(skills, other.skills)
 				&& Objects.equals(vacancy, other.vacancy);
 	}
 
@@ -102,16 +122,4 @@ public class Candidate implements Serializable {
 		this.education = education;
 	}
 
-
-	public String getPastJobs() {
-		return pastJobs;
-	}
-
-
-	public void setPastJobs(String pastJobs) {
-		this.pastJobs = pastJobs;
-	};
-	
-	
-	
 }

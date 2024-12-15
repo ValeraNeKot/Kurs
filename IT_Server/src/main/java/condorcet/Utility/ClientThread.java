@@ -32,6 +32,8 @@ public class ClientThread implements Runnable {
     private ScheduleService scheduleService = new ScheduleService();
     private VacancyService vacancyService = new VacancyService();
     private PostService postService = new PostService();
+    private DepartmentService departmentService = new DepartmentService();
+    private CandidateService candidateService = new CandidateService();
     
     public ClientThread(Socket clientSocket) throws IOException {
         response = new Response();
@@ -95,13 +97,11 @@ public class ClientThread implements Runnable {
                         break;
                         }
                     case VACANCY:{
-                    	Vacancy requestDepartment = gson.fromJson(request.getRequestMessage(), Vacancy.class);
 	                    List<Vacancy> vacanc = vacancyService.findAllEntities();        		                    
 	                    response = new Response(ResponseStatus.OK, "Готово!", gson.toJson(vacanc));
                     break;
                     }
                     case POST:{
-                    	Post requestDepartment = gson.fromJson(request.getRequestMessage(), Post.class);
 	                    List<Post> vacanc = postService.findAllEntities();        		                    
 	                    response = new Response(ResponseStatus.OK, "Готово!", gson.toJson(vacanc));
                     break;
@@ -130,6 +130,69 @@ public class ClientThread implements Runnable {
                     	Post requestSchedule = gson.fromJson(request.getRequestMessage(), Post.class);
                     	postService.deleteEntity(requestSchedule);
                     	break;}
+                    case DEPARTMENT:{
+	                    List<Department> vacanc = departmentService.findAllEntities();        		                    
+	                    response = new Response(ResponseStatus.OK, "Готово!", gson.toJson(vacanc));
+                    break;}
+                    case DEPARTMENT_ADD:{
+                    	Department requestSchedule = gson.fromJson(request.getRequestMessage(), Department.class);
+                    	departmentService.saveEntity(requestSchedule);
+                    break;}
+                    case PERSONDATA_ADD:{
+                    	PersonData requestSchedule = gson.fromJson(request.getRequestMessage(), PersonData.class);
+                    	personDataService.saveEntity(requestSchedule);
+                    break;}
+                    case DEPARTMENT_UPDATE:{
+                    	Department requestSchedule = gson.fromJson(request.getRequestMessage(), Department.class);
+                    	departmentService.updateEntity(requestSchedule);
+                    	break;}
+                    case PERSONDATA_UPDATE:{
+                    	PersonData requestSchedule = gson.fromJson(request.getRequestMessage(), PersonData.class);
+                    	personDataService.updateEntity(requestSchedule);
+                    	break;}
+                    case DEPARTMENT_DELETE:{
+                    	Department requestSchedule = gson.fromJson(request.getRequestMessage(), Department.class);
+                    	departmentService.deleteEntity(requestSchedule);
+                    	break;}
+                    case CANDIDATE:{
+	                    List<Candidate> vacanc = candidateService.findAllEntities();        		                    
+	                    response = new Response(ResponseStatus.OK, "Готово!", gson.toJson(vacanc));
+                    break;}
+                    case CANDIDATE_ADD:{
+                    	Candidate requestSchedule = gson.fromJson(request.getRequestMessage(), Candidate.class);
+                    	candidateService.saveEntity(requestSchedule);
+                    break;}
+                    case CANDIDATE_UPDATE:{
+                    	Candidate requestSchedule = gson.fromJson(request.getRequestMessage(), Candidate.class);
+                    	candidateService.updateEntity(requestSchedule);
+                    	break;}
+                    case CANDIDATE_DELETE:{
+                    	Candidate requestSchedule = gson.fromJson(request.getRequestMessage(), Candidate.class);
+                    	candidateService.deleteEntity(requestSchedule);
+                    	break;}
+                    case USERS:{
+	                    List<User> vacanc = userService.findAllEntities();        		                    
+	                    response = new Response(ResponseStatus.OK, "Готово!", gson.toJson(vacanc));
+                    break;}
+                    case SPECIALIST:{
+	                    List<Specialist> vacanc = specialistService.findAllEntities();        		                    
+	                    response = new Response(ResponseStatus.OK, "Готово!", gson.toJson(vacanc));
+                    break;}
+                    case SPECIALIST_ADD:{
+                    	Specialist requestSchedule = gson.fromJson(request.getRequestMessage(), Specialist.class);
+                    	specialistService.saveEntity(requestSchedule);
+                    break;}
+                    case SPECIALIST_UPDATE:{
+                    	Specialist requestSchedule = gson.fromJson(request.getRequestMessage(), Specialist.class);
+                    	specialistService.updateEntity(requestSchedule);
+                    	break;}
+                    case SPECIALIST_DELETE:{
+                    	Specialist requestSchedule = gson.fromJson(request.getRequestMessage(), Specialist.class);
+                    	specialistService.deleteEntity(requestSchedule);
+                    	break;}
+				default:
+					break;
+                    
                 }
                 out.println(gson.toJson(response));
                 out.flush();        
