@@ -740,16 +740,18 @@ public class HR {
             Specialist specialist =  new Specialist(getPersonDataById(pers, id), null, new User(users.stream().mapToInt(User::getIdAccount).max().orElse(0)+1,
             		"new"+Integer.toString(users.stream().mapToInt(User::getIdAccount).max().orElse(0)+1),
             		"new"+Integer.toString(users.stream().mapToInt(User::getIdAccount).max().orElse(0)+1),
-            		Roles.valueOf(role),null), getDepartmentByName(departments, dep), getPositionByName(post, pos));
+            		Roles.valueOf(role), null), getDepartmentByName(departments, dep), getPositionByName(post, pos));
             
             specialist.getUser().setSpecialist(specialist);
-            specialists.add(specialist);
+
             
             Request requestModel = new Request();
             requestModel.setRequestMessage(new Gson().toJson(specialist));
             requestModel.setRequestType(RequestType.SPECIALIST_ADD);
             ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
             ClientSocket.getInstance().getOut().flush();
+            
+            specialists.add(specialist);
             
             System.out.println("Добавлено в БД: " + specialist);
         } catch (NumberFormatException e) {
@@ -771,7 +773,7 @@ public class HR {
             String role = roleComboBoxSpecialist.getValue();
            
             // Проверка уникальности ID
-            if (specialists.stream().anyMatch(vacancy -> vacancy.getPersonData().getId() == id)) {
+            if (selected.getPersonData().getId() != id) {
                 showAlert("Ошибка", "ID уже существует!");
                 return;
             }
@@ -800,15 +802,20 @@ public class HR {
             showAlert("Ошибка", "Не выбрана строка для удаления!");
             return;
         }
-
-        specialists.remove(selected);
+        if (selected.getUser().getIdAccount()== ClientSocket.getInstance().getUser().getIdAccount()) {
+            showAlert("Ошибка", "Нельзя удалить самого себя!");
+            return;
+        }
+        
 
         Request requestModel = new Request();
         requestModel.setRequestMessage(new Gson().toJson(selected));
         requestModel.setRequestType(RequestType.SPECIALIST_DELETE);
         ClientSocket.getInstance().getOut().println(new Gson().toJson(requestModel));
         ClientSocket.getInstance().getOut().flush();
-
+        
+        specialists.remove(selected);
+        
         System.out.println("Удалено из БД: " + selected);
     }
     @FXML
